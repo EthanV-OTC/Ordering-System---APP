@@ -1,0 +1,17 @@
+css/* Style all push buttons */
+QPushButton {
+    background-color: #2b5b84;
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+/* Style a specific button by its object name */
+QPushButton#myButton {
+    background-color: #e74c3c;
+}
+
+/* Hover effect */
+QPushButton:hover {
+    background-color: #3e82ba;
+}

@@ -8,6 +8,11 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("Shitty lil Uber-Eats ahh ordering sustem")
         self.resize(1920,1080)
+
+        with open("style.qss", "r") as f:
+            _style = f.read()
+            app.setStyleSheet(_style)
+
         self.is_logged_in = False
 
         main_container = QWidget()
@@ -32,14 +37,17 @@ class MainWindow(QMainWindow):
 
     def setup_navbar(self):
         self.btn_login = QPushButton("Login")
+        self.btn_logout = QPushButton("Logout")
         btn_home = QPushButton("Home")
         btn_store = QPushButton("Store 1")
 
         self.btn_login.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(1))
         btn_home.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(0))
         btn_store.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(2))
+        self.btn_logout.clicked.connect(self.logout_user)
 
         self.navbar.addWidget(self.btn_login)
+        self.navbar.addWidget(self.btn_logout)
         self.navbar.addWidget(btn_home)
         self.navbar.addWidget(btn_store)
         self.navbar.addStretch()
@@ -50,11 +58,15 @@ class MainWindow(QMainWindow):
         
         self.logged_in_label = QLabel("The user is logged in")
         self.logged_in_label.setVisible(False) 
+        self.btn_logout.setVisible(False)
+
+        self.logged_out_label = QLabel("The User is logged out")
+        self.logged_out_label.setVisible(True)
 
         label = QLabel("This is the Home Page")
         layout.addWidget(label)
         layout.addWidget(self.logged_in_label) 
-
+        layout.addWidget(self.logged_out_label)
         page.setLayout(layout)
         return page
 
@@ -65,18 +77,29 @@ class MainWindow(QMainWindow):
         self.loginbutton.clicked.connect(self.login_is_clicked) 
         layout.addWidget(self.loginbutton)
 
-        label = QLabel("This is the Second Page")
+        label = QLabel("This is the Login Page")
         layout.addWidget(label)
         
         page.setLayout(layout)
         return page
+    
+    def logout_user(self):
+        self.is_logged_in = False
+        print("User is now logged out!")
+
+        self.logged_out_label.setVisible(True)
+        self.logged_in_label.setVisible(False)
+        self.btn_login.setVisible(True)
+        self.btn_logout.setVisible(False)
 
     def login_is_clicked(self):
         self.is_logged_in = True
         print("User is now logged in!")
         
-        self.logged_in_label.setVisible(True)     
+        self.logged_in_label.setVisible(True)
+        self.logged_out_label.setVisible(False)     
         self.btn_login.setVisible(False)
+        self.btn_logout.setVisible(True)
         self.stacked_widget.setCurrentIndex(0) 
 
     def create_Store1(self):
