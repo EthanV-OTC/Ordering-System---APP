@@ -13,5 +13,5 @@ QPushButton#myButton {
 
 /* Hover effect */
 QPushButton:hover {
-    background-color: #3e82ba;
+    background-color: #737373;
 }
