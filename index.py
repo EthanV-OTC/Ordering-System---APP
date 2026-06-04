@@ -33,11 +33,13 @@ class MainWindow(QMainWindow):
 
         self.Home = self.create_Home()
         self.Login = self.create_Login()
+        self.Register = self.create_Register()
         self.Store1 = self.create_Store1()
         
         self.stacked_widget.addWidget(self.Home)
         self.stacked_widget.addWidget(self.Login)
         self.stacked_widget.addWidget(self.Store1)
+        self.stacked_widget.addWidget(self.Register)
 
         self.btn_logout.setVisible(False)
         self.btn_login.setVisible(True)
@@ -62,6 +64,7 @@ class MainWindow(QMainWindow):
         self.navbar.addStretch()
 
     def create_Home(self):
+        
         page = QWidget()
         layout = QVBoxLayout()
         
@@ -103,7 +106,10 @@ class MainWindow(QMainWindow):
         self.login_rememberme = QCheckBox("Remember Me?")
 
         self.loginbutton = QPushButton("Click here to Login")
-        self.loginbutton.clicked.connect(self.login_is_clicked)         
+        self.loginbutton.clicked.connect(self.login_is_clicked)    
+
+        self.registerpage_button = QPushButton("Haven't logged in before? Register Here!!")
+        self.registerpage_button.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(3))
 
         layout.addWidget(self.login_email)
         layout.addSpacing(20)                
@@ -115,8 +121,46 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.login_rememberme)
         layout.addSpacing(6)                 
         layout.addWidget(self.loginbutton)
+        layout.addSpacing(10)
+        layout.addWidget(self.registerpage_button)
 
         main_layout.addWidget(form_widget, alignment=Qt.AlignCenter)
+        page.setLayout(main_layout)
+        return page
+
+    def create_Register(self):
+        page = QWidget()
+        main_layout = QVBoxLayout()
+
+        form_widget = QWidget()
+        form_widget.setFixedWidth(400)
+        layout = QVBoxLayout(form_widget)
+        layout.setSpacing(0)
+
+        self.register_email = QLineEdit()
+        self.register_email.setPlaceholderText("Enter your Email here!")
+
+        self.register_pass = QLineEdit()
+        self.register_pass.setPlaceholderText("Enter your Password here!")
+
+        self.register_status = QLabel("Invalid Email!! Please enter one with an '@_____.com' to proceed!!")
+        self.register_status.setStyleSheet("color: red; font-size: 11px;")
+        self.register_status.setFrameShape(QLabel.NoFrame)
+        self.register_status.setWordWrap(True)
+        self.register_status.setVisible(False)
+
+        self.register_btn = QPushButton('Click here to Register!')
+        self.register_btn.clicked.connect(self.register_is_clicked)
+
+        layout.addWidget(self.register_email)
+        layout.addSpacing(10)
+        layout.addWidget(self.register_pass)
+        layout.addSpacing(6)
+        layout.addWidget(self.register_status)
+        layout.addSpacing(12)
+        layout.addWidget(self.register_btn)
+
+        main_layout.addWidget(form_widget, alignment=Qt.AlignCenter)   
         page.setLayout(main_layout)
         return page
 
@@ -137,19 +181,36 @@ class MainWindow(QMainWindow):
         
         self.stacked_widget.setCurrentIndex(0)
 
-    def login_is_clicked(self):
-        email_text = self.login_email.text()
-        if not (email_text.endswith("@gmail.com") or email_text.endswith("@hotmail.com") or email_text.endswith("@outlook.com")):
-            self.password_status.setVisible(True)
+    def register_is_clicked(self):
+        self.email = self.register_email.text()
+        self.password = self.register_pass.text()        
+        
+        if not (self.email.endswith("@gmail.com") or self.email.endswith("@hotmail.com") or self.email.endswith("@outlook.com")):
+            self.register_status.setVisible(True)
             return  
+        self.stacked_widget.setCurrentIndex(1)
+
+    def login_is_clicked(self):
+        input_email = self.login_email.text()
+        input_password = self.login_password.text()
+
+        if not hasattr(self, 'email') or not hasattr(self, 'password'):
+            self.password_status.setText("No account found! Please register first.")
+            self.password_status.setVisible(True)
+            return
+
+        if input_email != self.email or input_password != self.password:
+            self.password_status.setText("Incorrect email or password!!")
+            self.password_status.setVisible(True)
+            return
 
         self.is_logged_in = True
         self.password_status.setVisible(False)
         print("User is now logged in!")
 
         if self.login_rememberme.isChecked():
-            self.settings.setValue("email", self.login_email.text())
-            self.settings.setValue("password", self.login_password.text())
+            self.settings.setValue("email", input_email)
+            self.settings.setValue("password", input_password)
             self.settings.setValue("remember", True)
         else:
             self.settings.remove("email")
@@ -173,6 +234,7 @@ class MainWindow(QMainWindow):
             self.login_password.setText(saved_password)
             self.login_rememberme.setChecked(True)
 
+
     def create_Store1(self):
         page = QWidget()
         layout = QVBoxLayout()
@@ -187,8 +249,13 @@ class MainWindow(QMainWindow):
     def go_to_previous_page(self):
         self.stacked_widget.setCurrentIndex(0)
     
+    def go_to_register(self):
+        self.stacked_widget.setCurrentIndex(3)    
+
     def go_to_store1(self):
         self.stacked_widget.setCurrentIndex(2)
+    
+
 
 
 app = QApplication(sys.argv)
