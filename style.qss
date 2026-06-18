@@ -28,3 +28,10 @@ QPushButton#btn_login:hover {
  QPushButton#btn_logout:hover {
     background-color: #DB3030;
  }
+
+ QPushButton#btn_checkout {
+    background-color: #48C942; 
+ }
+ QPushButton#btn_checkout:hover {
+    background-color: #369632;
+}

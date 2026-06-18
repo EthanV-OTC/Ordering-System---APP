@@ -47,6 +47,7 @@ class MainWindow(QMainWindow):
         self.pizza = self.create_pizza()
         self.chicken = self.create_chicken()
         self.sandwich = self.create_sandwich()
+        self.checkout = self.create_checkout()
         
         self.stacked_widget.addWidget(self.Home)
         self.stacked_widget.addWidget(self.Login)
@@ -55,6 +56,7 @@ class MainWindow(QMainWindow):
         self.stacked_widget.addWidget(self.pizza)
         self.stacked_widget.addWidget(self.chicken)
         self.stacked_widget.addWidget(self.sandwich)
+        self.stacked_widget.addWidget(self.checkout)
 
 
         self.mcdonalds = self.create_mcdonalds()
@@ -90,9 +92,11 @@ class MainWindow(QMainWindow):
         btn_pizza = QPushButton("Pizza")
         btn_chicken = QPushButton("Chicken")
         btn_sandwich = QPushButton("Sandwiches")
+        self.btn_checkout = QPushButton("Checkout")
 
         self.btn_login.setObjectName("btn_login")
         self.btn_logout.setObjectName("btn_logout")
+        self.btn_checkout.setObjectName("btn_checkout")
 
         self.btn_login.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Login))
         btn_home.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Home))
@@ -100,6 +104,7 @@ class MainWindow(QMainWindow):
         btn_pizza.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.pizza))
         btn_chicken.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.chicken))
         btn_sandwich.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.sandwich))
+        self.btn_checkout.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.checkout))
 
 
         self.btn_logout.clicked.connect(self.logout_user)
@@ -112,6 +117,8 @@ class MainWindow(QMainWindow):
         self.navbar.addWidget(btn_chicken)
         self.navbar.addWidget(btn_sandwich)
         self.navbar.addStretch()
+        self.navbar.addWidget(self.btn_checkout)
+        self.navbar.addSpacing(25)
 
     def create_Home(self):
         page = QWidget()
@@ -671,6 +678,16 @@ class MainWindow(QMainWindow):
         page.setLayout(layout)
 
         self.Label = QLabel("This is the Sales Page")
+
+        layout.addWidget(self.Label)
+        return page
+
+    def create_checkout(self):
+        page = QWidget()
+        layout = QGridLayout()
+        page.setLayout(layout)
+
+        self.Label = QLabel("This is the Checkout Page")
 
         layout.addWidget(self.Label)
         return page
