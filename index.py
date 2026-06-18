@@ -1,15 +1,24 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QStackedWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QCheckBox
-from PyQt5.QtCore import Qt, QSettings
-import sys
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QStackedWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QLabel, QLineEdit, QCheckBox
+from PyQt5.QtCore import Qt, QSettings, pyqtSignal
+from PyQt5.QtGui import QPixmap
+import sys, os
 
+class ClickableLabel(QLabel):
+    clicked = pyqtSignal()
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+    def mousePressEvent(self, event):
+        self.clicked.emit()
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Shitty lil Uber-Eats ahh ordering sustem")
+        self.setWindowTitle("Rando lil Uber-Eats ahh ordering sustem")
         self.resize(1920,1080)
 
-        self.settings = QSettings("MyShittyCompany", "UberEatsClone")
+        self.settings = QSettings("Company", "UberEatsClone")
 
         try:
             with open("style.qss", "r") as f:
@@ -34,12 +43,39 @@ class MainWindow(QMainWindow):
         self.Home = self.create_Home()
         self.Login = self.create_Login()
         self.Register = self.create_Register()
-        self.Store1 = self.create_Store1()
+        self.burgers = self.create_burgers()
+        self.pizza = self.create_pizza()
+        self.chicken = self.create_chicken()
+        self.sandwich = self.create_sandwich()
         
         self.stacked_widget.addWidget(self.Home)
         self.stacked_widget.addWidget(self.Login)
-        self.stacked_widget.addWidget(self.Store1)
+        self.stacked_widget.addWidget(self.burgers)
         self.stacked_widget.addWidget(self.Register)
+        self.stacked_widget.addWidget(self.pizza)
+        self.stacked_widget.addWidget(self.chicken)
+        self.stacked_widget.addWidget(self.sandwich)
+
+
+        self.mcdonalds = self.create_mcdonalds()
+        self.burgerking = self.create_burgerking()
+        self.burgerfuel = self.create_burgerfuel()
+        self.dominoes = self.create_dominoes()
+        self.pizzahut = self.create_pizzahut()
+        self.pizzagods = self.create_pizzagods()
+        self.kfc = self.create_kfc()
+        self.subway = self.create_subway()
+        self.sale = self.create_sale()
+
+        self.stacked_widget.addWidget(self.mcdonalds)
+        self.stacked_widget.addWidget(self.burgerking)
+        self.stacked_widget.addWidget(self.burgerfuel)
+        self.stacked_widget.addWidget(self.dominoes)
+        self.stacked_widget.addWidget(self.pizzahut)
+        self.stacked_widget.addWidget(self.pizzagods)
+        self.stacked_widget.addWidget(self.kfc)
+        self.stacked_widget.addWidget(self.subway)
+        self.stacked_widget.addWidget(self.sale)
 
         self.btn_logout.setVisible(False)
         self.btn_login.setVisible(True)
@@ -50,36 +86,183 @@ class MainWindow(QMainWindow):
         self.btn_login = QPushButton("Login")
         self.btn_logout = QPushButton("Logout")
         btn_home = QPushButton("Home")
-        btn_store = QPushButton("Store 1")
+        btn_burgers = QPushButton("Burgers")
+        btn_pizza = QPushButton("Pizza")
+        btn_chicken = QPushButton("Chicken")
+        btn_sandwich = QPushButton("Sandwiches")
 
-        self.btn_login.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(1))
-        btn_home.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(0))
-        btn_store.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(2))
+        self.btn_login.setObjectName("btn_login")
+        self.btn_logout.setObjectName("btn_logout")
+
+        self.btn_login.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Login))
+        btn_home.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Home))
+        btn_burgers.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.burgers))
+        btn_pizza.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.pizza))
+        btn_chicken.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.chicken))
+        btn_sandwich.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.sandwich))
+
+
         self.btn_logout.clicked.connect(self.logout_user)
 
         self.navbar.addWidget(self.btn_login)
         self.navbar.addWidget(self.btn_logout)
         self.navbar.addWidget(btn_home)
-        self.navbar.addWidget(btn_store)
+        self.navbar.addWidget(btn_burgers)
+        self.navbar.addWidget(btn_pizza)
+        self.navbar.addWidget(btn_chicken)
+        self.navbar.addWidget(btn_sandwich)
         self.navbar.addStretch()
 
     def create_Home(self):
-        
         page = QWidget()
-        layout = QVBoxLayout()
-        
-        self.logged_in_label = QLabel("The user is logged in")
-        self.logged_in_label.setVisible(False) 
-
-        self.logged_out_label = QLabel("The User is logged out")
-        self.logged_out_label.setVisible(True)
-
-        label = QLabel("This is the Home Page")
-        layout.addWidget(label)
-        layout.addWidget(self.logged_in_label) 
-        layout.addWidget(self.logged_out_label)
+        layout = QGridLayout()
         page.setLayout(layout)
+
+        base_path = os.path.dirname(os.path.abspath(__file__))
+        
+        # --- McDonald's Logo ---
+        McDonaldspath = os.path.join(base_path, "images", "McDonalds-logo.png")
+        McDonaldslogo = QPixmap(McDonaldspath)
+        self.McDonaldslabel = ClickableLabel()  
+
+        if McDonaldslogo.isNull():
+            print(f"Failed to load image at: {McDonaldspath}")
+        else:
+            self.McDonaldslabel.setPixmap(McDonaldslogo)
+            self.McDonaldslabel.setScaledContents(True)        
+        self.McDonaldslabel.setFixedSize(250, 250)
+
+        self.McDonaldslabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.mcdonalds))
+
+        # --- Burger King Logo ---
+        BKpath = os.path.join(base_path, "images", "BK-logo.png")
+        BKlogo = QPixmap(BKpath)
+        self.Bklabel = ClickableLabel()
+
+        if BKlogo.isNull():
+            print(f"Failed to load image at: {BKpath}")
+        else:
+            self.Bklabel.setPixmap(BKlogo)
+            self.Bklabel.setScaledContents(True)
+        self.Bklabel.setFixedSize(250, 250)
+
+        self.Bklabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.burgerking))
+
+        # --- BurgerFuel Logo ---
+        burgerfuelpath = os.path.join(base_path, "images", "BurgerFuel-logo.png")
+        burgerfuellogo = QPixmap(burgerfuelpath)
+        self.burgerfuellabel = ClickableLabel()
+
+        if burgerfuellogo.isNull():
+            print(f"Failed to load image at {burgerfuelpath}")
+        else:
+            self.burgerfuellabel.setPixmap(burgerfuellogo)
+            self.burgerfuellabel.setScaledContents(True)
+        self.burgerfuellabel.setFixedSize(250, 250)
+
+        self.burgerfuellabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.burgerfuel))
+
+        # --- Dominoes Logo ---
+        dominoespath = os.path.join(base_path, "images", "Dominoes-logo.png")
+        dominoeslogo = QPixmap(dominoespath)
+        self.dominoeslabel = ClickableLabel()
+
+        if dominoeslogo.isNull():
+            print(f"Failed to load image at {dominoespath}")
+        else:
+            self.dominoeslabel.setPixmap(dominoeslogo)
+            self.dominoeslabel.setScaledContents(True)
+        self.dominoeslabel.setFixedSize(250, 250)
+
+        self.dominoeslabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.dominoes))
+
+        # --- PizzaHut Logo ---
+        pizzahutpath = os.path.join(base_path, "images", "PizzaHut-logo.png")
+        pizzahutlogo = QPixmap(pizzahutpath)
+        self.pizzahutlabel = ClickableLabel()
+
+        if pizzahutlogo.isNull():
+            print(f"Failed to load image at {pizzahutpath}")
+        else:
+            self.pizzahutlabel.setPixmap(pizzahutlogo)
+            self.pizzahutlabel.setScaledContents(True)
+        self.pizzahutlabel.setFixedSize(250, 250)
+
+        self.pizzahutlabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.pizzahut))
+
+        # --- Pizza Gods Logo ---
+        pizzagodspath = os.path.join(base_path, "images", "PizzaGods-logo.png")
+        pizzagodslogo = QPixmap(pizzagodspath)
+        self.pizzagodslabel = ClickableLabel()
+
+        if pizzagodslogo.isNull():
+            print(f"Failed to load image at {pizzagodspath}")
+        else:
+            self.pizzagodslabel.setPixmap(pizzagodslogo)
+            self.pizzagodslabel.setScaledContents(True)
+        self.pizzagodslabel.setFixedSize(250, 250)
+
+        self.pizzagodslabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.pizzagods))
+
+        # --- KFC Logo ---
+        kfcpath = os.path.join(base_path, "images", "KFC-logo.png")
+        kfclogo = QPixmap(kfcpath)
+        self.kfclabel = ClickableLabel()
+
+        if kfclogo.isNull():
+            print(f"Failed to load image at {kfcpath}")
+        else:
+            self.kfclabel.setPixmap(kfclogo)
+            self.kfclabel.setScaledContents(True)
+        self.kfclabel.setFixedSize(250, 250)
+
+        self.kfclabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.kfc))
+
+        # --- Subway Logo ---
+        subwaypath = os.path.join(base_path, "images", "Subway-logo.png")
+        subwaylogo = QPixmap(subwaypath)
+        self.subwaylabel = ClickableLabel()
+
+        if subwaylogo.isNull():
+            print(f"Failed to load image at {subwaypath}")
+        else:
+            self.subwaylabel.setPixmap(subwaylogo)
+            self.subwaylabel.setScaledContents(True)
+        self.subwaylabel.setFixedSize(250, 250)
+
+        self.subwaylabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.subway))
+
+        # --- Sale Logo ---
+        salepath = os.path.join(base_path, "images", "Sale-logo.png")
+        salelogo = QPixmap(salepath)
+        self.salelabel = ClickableLabel()
+
+        if salelogo.isNull():
+            print(f"Failed to load image at {salepath}")
+        else:
+            self.salelabel.setPixmap(salelogo)
+            self.salelabel.setScaledContents(True)
+        self.salelabel.setFixedSize(250, 250)
+
+        self.salelabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.sale))
+
+        # Row 1
+        layout.addWidget(self.McDonaldslabel, 0, 0)
+        layout.addWidget(self.Bklabel, 0, 1)
+        layout.addWidget(self.burgerfuellabel, 0, 2)
+        
+        # Row 2
+        layout.addWidget(self.dominoeslabel, 1, 0)
+        layout.addWidget(self.pizzahutlabel, 1, 1)
+        layout.addWidget(self.pizzagodslabel, 1, 2)
+
+        # Row 3
+        layout.addWidget(self.kfclabel, 2, 0)
+        layout.addWidget(self.salelabel, 2, 1)
+        layout.addWidget(self.subwaylabel, 2 ,2)
+
         return page
+
 
     def create_Login(self):
         page = QWidget()
@@ -174,8 +357,6 @@ class MainWindow(QMainWindow):
         self.login_password.clear()
         self.login_rememberme.setChecked(False)
 
-        self.logged_out_label.setVisible(True)
-        self.logged_in_label.setVisible(False)
         self.btn_login.setVisible(True)
         self.btn_logout.setVisible(False)
         
@@ -216,9 +397,7 @@ class MainWindow(QMainWindow):
             self.settings.remove("email")
             self.settings.remove("password")
             self.settings.remove("remember")
-        
-        self.logged_in_label.setVisible(True)
-        self.logged_out_label.setVisible(False)     
+         
         self.btn_login.setVisible(False)
         self.btn_logout.setVisible(True)
         self.stacked_widget.setCurrentIndex(0) 
@@ -233,30 +412,269 @@ class MainWindow(QMainWindow):
             self.login_email.setText(saved_email)
             self.login_password.setText(saved_password)
             self.login_rememberme.setChecked(True)
+            self.email = (saved_email)
+            self.password = (saved_password)
 
 
-    def create_Store1(self):
+    def create_burgers(self):
         page = QWidget()
-        layout = QVBoxLayout()
-        label = QLabel("This is the First Store Page")
-        layout.addWidget(label)
+        layout = QGridLayout()
         page.setLayout(layout)
+
+        base_path = os.path.dirname(os.path.abspath(__file__))
+
+        # --- McDonald's Logo ---
+        McDonaldspath = os.path.join(base_path, "images", "McDonalds-logo.png")
+        McDonaldslogo = QPixmap(McDonaldspath)
+        self.McDonaldslabel = ClickableLabel()  
+
+        if McDonaldslogo.isNull():
+            print(f"Failed to load image at: {McDonaldspath}")
+        else:
+            self.McDonaldslabel.setPixmap(McDonaldslogo)
+            self.McDonaldslabel.setScaledContents(True)        
+        self.McDonaldslabel.setFixedSize(250, 250)
+
+        self.McDonaldslabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.mcdonalds))
+
+        # --- Burger King Logo ---
+        BKpath = os.path.join(base_path, "images", "BK-logo.png")
+        BKlogo = QPixmap(BKpath)
+        self.Bklabel = ClickableLabel()
+
+        if BKlogo.isNull():
+            print(f"Failed to load image at: {BKpath}")
+        else:
+            self.Bklabel.setPixmap(BKlogo)
+            self.Bklabel.setScaledContents(True)
+        self.Bklabel.setFixedSize(250, 250)
+
+        self.Bklabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.burgerking))
+
+        # --- BurgerFuel Logo ---
+        burgerfuelpath = os.path.join(base_path, "images", "BurgerFuel-logo.png")
+        burgerfuellogo = QPixmap(burgerfuelpath)
+        self.burgerfuellabel = ClickableLabel()
+
+        if burgerfuellogo.isNull():
+            print(f"Failed to load image at {burgerfuelpath}")
+        else:
+            self.burgerfuellabel.setPixmap(burgerfuellogo)
+            self.burgerfuellabel.setScaledContents(True)
+        self.burgerfuellabel.setFixedSize(250, 250)
+
+        self.burgerfuellabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.burgerfuel))
+
+
+
+        layout.addWidget(self.McDonaldslabel, 0, 0)
+        layout.addWidget(self.Bklabel, 0, 1)
+        layout.addWidget(self.burgerfuellabel, 0, 2)
         return page
-            
-    def go_to_next_page(self):
-        self.stacked_widget.setCurrentIndex(1)
 
-    def go_to_previous_page(self):
-        self.stacked_widget.setCurrentIndex(0)
+
+    def create_pizza(self):
+        page = QWidget()
+        layout = QGridLayout()
+        page.setLayout(layout)
+
+        base_path = os.path.dirname(os.path.abspath(__file__))
+
+        # --- Dominoes Logo ---
+        dominoespath = os.path.join(base_path, "images", "Dominoes-logo.png")
+        dominoeslogo = QPixmap(dominoespath)
+        self.dominoeslabel = ClickableLabel()
+
+        if dominoeslogo.isNull():
+            print(f"Failed to load image at {dominoespath}")
+        else:
+            self.dominoeslabel.setPixmap(dominoeslogo)
+            self.dominoeslabel.setScaledContents(True)
+        self.dominoeslabel.setFixedSize(250, 250)
+
+        self.dominoeslabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.dominoes))
+
+        # --- PizzaHut Logo ---
+        pizzahutpath = os.path.join(base_path, "images", "PizzaHut-logo.png")
+        pizzahutlogo = QPixmap(pizzahutpath)
+        self.pizzahutlabel = ClickableLabel()
+
+        if pizzahutlogo.isNull():
+            print(f"Failed to load image at {pizzahutpath}")
+        else:
+            self.pizzahutlabel.setPixmap(pizzahutlogo)
+            self.pizzahutlabel.setScaledContents(True)
+        self.pizzahutlabel.setFixedSize(250, 250)
+
+        self.pizzahutlabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.pizzahut))
+
+        # --- Pizza Gods Logo ---
+        pizzagodspath = os.path.join(base_path, "images", "PizzaGods-logo.png")
+        pizzagodslogo = QPixmap(pizzagodspath)
+        self.pizzagodslabel = ClickableLabel()
+
+        if pizzagodslogo.isNull():
+            print(f"Failed to load image at {pizzagodspath}")
+        else:
+            self.pizzagodslabel.setPixmap(pizzagodslogo)
+            self.pizzagodslabel.setScaledContents(True)
+        self.pizzagodslabel.setFixedSize(250, 250)
+
+        self.pizzagodslabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.pizzagods))
+
+
+
+        layout.addWidget(self.dominoeslabel, 0, 0)
+        layout.addWidget(self.pizzahutlabel, 0, 1)
+        layout.addWidget(self.pizzagodslabel, 0, 2)
+        return page
+
+
+    def create_chicken(self):
+        page = QWidget()
+        layout = QGridLayout()
+        page.setLayout(layout)
+
+        base_path = os.path.dirname(os.path.abspath(__file__))
+
+        # --- KFC Logo ---
+        kfcpath = os.path.join(base_path, "images", "KFC-logo.png")
+        kfclogo = QPixmap(kfcpath)
+        self.kfclabel = ClickableLabel()
+
+        if kfclogo.isNull():
+            print(f"Failed to load image at {kfcpath}")
+        else:
+            self.kfclabel.setPixmap(kfclogo)
+            self.kfclabel.setScaledContents(True)
+        self.kfclabel.setFixedSize(250, 250)
+
+        self.kfclabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.kfc))
+
+
+
+        layout.addWidget(self.kfclabel, 0, 0)
+        return page
+
+
+    def create_sandwich(self):
+        page = QWidget()
+        layout = QGridLayout()
+        page.setLayout(layout)
+
+        base_path = os.path.dirname(os.path.abspath(__file__))
+        
+        # --- Subway Logo ---
+        subwaypath = os.path.join(base_path, "images", "Subway-logo.png")
+        subwaylogo = QPixmap(subwaypath)
+        self.subwaylabel = ClickableLabel()
+
+        if subwaylogo.isNull():
+            print(f"Failed to load image at {subwaypath}")
+        else:
+            self.subwaylabel.setPixmap(subwaylogo)
+            self.subwaylabel.setScaledContents(True)
+        self.subwaylabel.setFixedSize(250, 250)
+
+        self.subwaylabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.subway))
+
+
+
+        layout.addWidget(self.subwaylabel, 0, 0)
+        return page
     
-    def go_to_register(self):
-        self.stacked_widget.setCurrentIndex(3)    
-
-    def go_to_store1(self):
-        self.stacked_widget.setCurrentIndex(2)
-    
 
 
+    def create_mcdonalds(self):
+        page = QWidget()
+        layout = QGridLayout()
+        page.setLayout(layout)
+
+        self.Label = QLabel("This is the Mcdonalds Store Page")
+
+        layout.addWidget(self.Label)
+        return page
+
+    def create_burgerking(self):
+        page = QWidget()
+        layout = QGridLayout()
+        page.setLayout(layout)
+
+        self.Label = QLabel("This is the BugerKing Store Page")
+
+        layout.addWidget(self.Label)
+        return page
+
+    def create_burgerfuel(self):
+        page = QWidget()
+        layout = QGridLayout()
+        page.setLayout(layout)
+
+        self.Label = QLabel("This is the BurgerFuel Store Page")
+
+        layout.addWidget(self.Label)
+        return page
+        
+    def create_dominoes(self):
+        page = QWidget()
+        layout = QGridLayout()
+        page.setLayout(layout)
+
+        self.Label = QLabel("This is the Dominoes Store Page")
+
+        layout.addWidget(self.Label)
+        return page
+                
+    def create_pizzahut(self):
+        page = QWidget()
+        layout = QGridLayout()
+        page.setLayout(layout)
+
+        self.Label = QLabel("This is the PizzaHut Store Page")
+
+        layout.addWidget(self.Label)
+        return page
+        
+    def create_pizzagods(self):
+        page = QWidget()
+        layout = QGridLayout()
+        page.setLayout(layout)
+
+        self.Label = QLabel("This is the PizzaGods Store Page")
+
+        layout.addWidget(self.Label)
+        return page
+        
+    def create_kfc(self):
+        page = QWidget()
+        layout = QGridLayout()
+        page.setLayout(layout)
+
+        self.Label = QLabel("This is the KFC Store Page")
+
+        layout.addWidget(self.Label)
+        return page
+        
+    def create_subway(self):
+        page = QWidget()
+        layout = QGridLayout()
+        page.setLayout(layout)
+
+        self.Label = QLabel("This is the Subway Store Page")
+
+        layout.addWidget(self.Label)
+        return page
+        
+    def create_sale(self):
+        page = QWidget()
+        layout = QGridLayout()
+        page.setLayout(layout)
+
+        self.Label = QLabel("This is the Sales Page")
+
+        layout.addWidget(self.Label)
+        return page
+        
 
 app = QApplication(sys.argv)
 main_window = MainWindow()
