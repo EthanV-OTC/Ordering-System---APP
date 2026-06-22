@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QStackedWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QLabel, QLineEdit, QCheckBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QStackedWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QLabel, QLineEdit, QCheckBox, QDialog, QListWidget
 from PyQt5.QtCore import Qt, QSettings, pyqtSignal
 from PyQt5.QtGui import QPixmap
 import sys, os
@@ -11,6 +11,33 @@ class ClickableLabel(QLabel):
 
     def mousePressEvent(self, event):
         self.clicked.emit()
+
+class FoodPopup(QDialog):
+    def __init__(self, item_name, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Add to Order")
+        self.resize(300, 120)
+        
+        layout = QVBoxLayout()
+        
+        # Change text dynamically based on the argument passed
+        self.message = QLabel(f"Would you like to add a {item_name} to your list?")
+        layout.addWidget(self.message)
+        
+        # Button configurations
+        button_layout = QHBoxLayout()
+        
+        self.add_btn = QPushButton("Add to List")
+        self.add_btn.clicked.connect(self.accept)  # Returns 1 (Accepted)
+        
+        self.close_btn = QPushButton("Close")
+        self.close_btn.clicked.connect(self.reject)  # Returns 0 (Rejected)
+        
+        button_layout.addWidget(self.add_btn)
+        button_layout.addWidget(self.close_btn)
+        
+        layout.addLayout(button_layout)
+        self.setLayout(layout)
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -597,10 +624,27 @@ class MainWindow(QMainWindow):
         layout = QGridLayout()
         page.setLayout(layout)
 
-        self.Label = QLabel("This is the Mcdonalds Store Page")
+        base_path = os.path.dirname(os.path.abspath(__file__))
 
-        layout.addWidget(self.Label)
+        # --- BigMac ---
+        bigmacpath = os.path.join(base_path, "images", "BigMac.png")
+        bigmacphoto = QPixmap(bigmacpath)
+        self.bigmaclabel = ClickableLabel()  
+
+        if bigmacphoto.isNull():
+            print(f"Failed to load image at: {bigmacpath}")
+        else:
+            self.bigmaclabel.setPixmap(bigmacphoto)
+            self.bigmaclabel.setScaledContents(True)        
+        self.bigmaclabel.setFixedSize(250, 250)
+
+        # CHANGE: Pass the exact item identity string into your handling method
+        self.bigmaclabel.clicked.connect(lambda: self.handle_food_click("Big Mac"))
+
+        layout.addWidget(self.bigmaclabel)
         return page
+
+    
 
     def create_burgerking(self):
         page = QWidget()
@@ -681,7 +725,18 @@ class MainWindow(QMainWindow):
 
         layout.addWidget(self.Label)
         return page
-
+        
+    def handle_food_click(self, item_name):
+            """
+            Spawns the dynamic popup window. If the 'Add to List' button is 
+            pressed, it extracts the target string and populates the list widget.
+            """
+            popup = FoodPopup(item_name, self)
+            
+            # If the user clicks 'Add to List'
+            if popup.exec_() == QDialog.Accepted:
+                # Assuming you have a QListWidget named self.list_widget in your main UI layout
+                self.list_widget.addItem(f"Ordered: {item_name}") 
     def create_checkout(self):
         page = QWidget()
         layout = QGridLayout()
