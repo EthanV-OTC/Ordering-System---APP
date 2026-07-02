@@ -20,22 +20,45 @@ class FoodPopup(QDialog):
         
         layout = QVBoxLayout()
         
-        # Change text dynamically based on the argument passed
-        self.message = QLabel(f"Would you like to add a {item_name} to your list?")
-        layout.addWidget(self.message)
+        self.ordermessage = QLabel(f"Would you like to add a {item_name} to your list?")
+        layout.addWidget(self.ordermessage)
         
-        # Button configurations
         button_layout = QHBoxLayout()
         
         self.add_btn = QPushButton("Add to List")
-        self.add_btn.clicked.connect(self.accept)  # Returns 1 (Accepted)
+        self.add_btn.clicked.connect(self.accept) 
         
         self.close_btn = QPushButton("Close")
-        self.close_btn.clicked.connect(self.reject)  # Returns 0 (Rejected)
+        self.close_btn.clicked.connect(self.reject) 
         
         button_layout.addWidget(self.add_btn)
         button_layout.addWidget(self.close_btn)
         
+        layout.addLayout(button_layout)
+        self.setLayout(layout)
+
+class MealPopup(QDialog):
+    def __init__(self, item_name, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Make it a Meal?")
+        self.resize(300, 120)
+
+        layout = QVBoxLayout()
+
+        self.mealmessage = QLabel(f"Would you like to make your {item_name} become a meal for an extra $5?")
+        layout.addWidget(self.mealmessage)
+
+        button_layout = QHBoxLayout()
+
+        self.meal_btn = QPushButton("Make it a meal! (+$5 to your order)")
+        self.meal_btn.clicked.connect(self.accept)
+
+        self.close_btn = QPushButton("No, keep it an item.")
+        self.close_btn.clicked.connect(self.reject)
+
+        button_layout.addWidget(self.meal_btn)
+        button_layout.addWidget(self.close_btn)
+
         layout.addLayout(button_layout)
         self.setLayout(layout)
 
@@ -46,6 +69,7 @@ class MainWindow(QMainWindow):
         self.resize(1920,1080)
 
         self.settings = QSettings("Company", "UberEatsClone")
+        self.checkout_list = QListWidget()
 
         try:
             with open("style.qss", "r") as f:
@@ -54,6 +78,7 @@ class MainWindow(QMainWindow):
             print("style.qss not found, skipping...")
 
         self.is_logged_in = False
+        self.MAIN_MEALS = ["big mac", "whopper", "bacon backfire", "pepperoni pizza (dominoes)", "pepperoni pizza (pizzahut)", "pepperoni pizza (pizzagods)", "medium chicken bucket", "meatball sub"]
 
         main_container = QWidget()
         main_layout = QVBoxLayout(main_container)
@@ -452,8 +477,22 @@ class MainWindow(QMainWindow):
 
     def create_burgers(self):
         page = QWidget()
+        
+        main_outer_layout = QVBoxLayout()
+        page.setLayout(main_outer_layout)
+
+        header_layout = QHBoxLayout()
+        
+        self.burgers_back_button = QPushButton("← Go Home")
+        self.burgers_back_button.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Home))
+        self.burgers_back_button.setFixedWidth(100) 
+        
+        header_layout.addWidget(self.burgers_back_button)
+        header_layout.addStretch()
+        
+        main_outer_layout.addLayout(header_layout)
+
         layout = QGridLayout()
-        page.setLayout(layout)
 
         base_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -499,18 +538,33 @@ class MainWindow(QMainWindow):
 
         self.burgerfuellabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.burgerfuel))
 
-
-
         layout.addWidget(self.McDonaldslabel, 0, 0)
         layout.addWidget(self.Bklabel, 0, 1)
         layout.addWidget(self.burgerfuellabel, 0, 2)
+        
+        main_outer_layout.addLayout(layout)
+        
         return page
 
 
     def create_pizza(self):
         page = QWidget()
+        
+        main_outer_layout = QVBoxLayout()
+        page.setLayout(main_outer_layout)
+
+        header_layout = QHBoxLayout()
+        
+        self.pizza_cat_back_button = QPushButton("← Go Home")
+        self.pizza_cat_back_button.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Home))
+        self.pizza_cat_back_button.setFixedWidth(100) 
+        
+        header_layout.addWidget(self.pizza_cat_back_button)
+        header_layout.addStretch()
+        
+        main_outer_layout.addLayout(header_layout)
+
         layout = QGridLayout()
-        page.setLayout(layout)
 
         base_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -556,18 +610,33 @@ class MainWindow(QMainWindow):
 
         self.pizzagodslabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.pizzagods))
 
-
-
         layout.addWidget(self.dominoeslabel, 0, 0)
         layout.addWidget(self.pizzahutlabel, 0, 1)
         layout.addWidget(self.pizzagodslabel, 0, 2)
+        
+        main_outer_layout.addLayout(layout)
+        
         return page
 
 
     def create_chicken(self):
         page = QWidget()
+        
+        main_outer_layout = QVBoxLayout()
+        page.setLayout(main_outer_layout)
+
+        header_layout = QHBoxLayout()
+        
+        self.chicken_cat_back_button = QPushButton("← Go Home")
+        self.chicken_cat_back_button.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Home))
+        self.chicken_cat_back_button.setFixedWidth(100) 
+        
+        header_layout.addWidget(self.chicken_cat_back_button)
+        header_layout.addStretch()
+        
+        main_outer_layout.addLayout(header_layout)
+
         layout = QGridLayout()
-        page.setLayout(layout)
 
         base_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -585,16 +654,31 @@ class MainWindow(QMainWindow):
 
         self.kfclabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.kfc))
 
-
-
         layout.addWidget(self.kfclabel, 0, 0)
+        
+        main_outer_layout.addLayout(layout)
+        
         return page
 
 
     def create_sandwich(self):
         page = QWidget()
+        
+        main_outer_layout = QVBoxLayout()
+        page.setLayout(main_outer_layout)
+
+        header_layout = QHBoxLayout()
+        
+        self.sandwich_cat_back_button = QPushButton("← Go Home")
+        self.sandwich_cat_back_button.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Home))
+        self.sandwich_cat_back_button.setFixedWidth(100) 
+        
+        header_layout.addWidget(self.sandwich_cat_back_button)
+        header_layout.addStretch()
+        
+        main_outer_layout.addLayout(header_layout)
+
         layout = QGridLayout()
-        page.setLayout(layout)
 
         base_path = os.path.dirname(os.path.abspath(__file__))
         
@@ -612,21 +696,45 @@ class MainWindow(QMainWindow):
 
         self.subwaylabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.subway))
 
-
-
         layout.addWidget(self.subwaylabel, 0, 0)
+        
+        main_outer_layout.addLayout(layout)
+        
         return page
+
     
 
 
     def create_mcdonalds(self):
         page = QWidget()
+        
+        main_outer_layout = QVBoxLayout()
+        page.setLayout(main_outer_layout)
+
+        header_layout = QHBoxLayout()
+        
+        self.mcdonalds_back_button = QPushButton("← Go Home")
+        self.mcdonalds_back_button.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Home))
+        self.mcdonalds_back_button.setFixedWidth(100) 
+        
+        header_layout.addWidget(self.mcdonalds_back_button)
+        header_layout.addStretch()
+        
+        main_outer_layout.addLayout(header_layout)
+
         layout = QGridLayout()
-        page.setLayout(layout)
 
         base_path = os.path.dirname(os.path.abspath(__file__))
+        
+        # --- Big Mac Item ---
+        bmprice = f"- $10.50"
+        bmdisplay_text = f"Big Mac {bmprice}"
+        bm_itemname = "Big Mac"
 
-        # --- BigMac ---
+        bigmac_container = QWidget()
+        bm_box = QVBoxLayout(bigmac_container)
+        bm_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
         bigmacpath = os.path.join(base_path, "images", "BigMac.png")
         bigmacphoto = QPixmap(bigmacpath)
         self.bigmaclabel = ClickableLabel()  
@@ -638,82 +746,501 @@ class MainWindow(QMainWindow):
             self.bigmaclabel.setScaledContents(True)        
         self.bigmaclabel.setFixedSize(250, 250)
 
-        # CHANGE: Pass the exact item identity string into your handling method
-        self.bigmaclabel.clicked.connect(lambda: self.handle_food_click("Big Mac"))
+        self.bigmac_text_label = QLabel(bmdisplay_text)
+        self.bigmac_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.bigmac_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        layout.addWidget(self.bigmaclabel)
+
+        self.bigmaclabel.clicked.connect(lambda checked=False, name=bm_itemname: self.handle_food_click(name))
+
+        bm_box.addWidget(self.bigmaclabel)
+        bm_box.addWidget(self.bigmac_text_label)
+
+        # --- Fries Item ---
+        fprice = f"- $4.50"
+        fdisplay_text = f"McDonalds Fries {fprice}"
+        f_itemname = "McDonalds Fries"
+
+        fries_container = QWidget()
+        f_box = QVBoxLayout(fries_container)
+        f_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        fpath = os.path.join(base_path, "images", "McFries.png")
+        fphoto = QPixmap(fpath)
+        self.mcflabel = ClickableLabel()  
+
+        if fphoto.isNull():
+            print(f"Failed to load image at: {fpath}")
+        else:
+            self.mcflabel.setPixmap(fphoto)
+            self.mcflabel.setScaledContents(True)        
+        self.mcflabel.setFixedSize(250, 250)
+
+        self.mcf_text_label = QLabel(fdisplay_text)
+        self.mcf_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.mcf_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.mcflabel.clicked.connect(lambda checked=False, name=f_itemname: self.handle_food_click(name))
+
+        f_box.addWidget(self.mcflabel)
+        f_box.addWidget(self.mcf_text_label)
+
+        layout.addWidget(bigmac_container, 0, 0) 
+        layout.addWidget(fries_container, 0, 1)
+        
+        main_outer_layout.addLayout(layout)
+        main_outer_layout.addStretch()
+        
         return page
-
-    
 
     def create_burgerking(self):
         page = QWidget()
+        
+        main_outer_layout = QVBoxLayout()
+        page.setLayout(main_outer_layout)
+
+        header_layout = QHBoxLayout()
+        
+        self.burgerking_back_button = QPushButton("← Go Home")
+        self.burgerking_back_button.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Home))
+        self.burgerking_back_button.setFixedWidth(100) 
+        
+        header_layout.addWidget(self.burgerking_back_button)
+        header_layout.addStretch()
+        
+        main_outer_layout.addLayout(header_layout)
+
         layout = QGridLayout()
-        page.setLayout(layout)
 
-        self.Label = QLabel("This is the BugerKing Store Page")
+        base_path = os.path.dirname(os.path.abspath(__file__))
+        
+        # --- Whopper Item ---
+        wprice = f"- 12.00"
+        wdisplay_text = f"Whopper {wprice}"
+        w_itemname = "Whopper"
 
-        layout.addWidget(self.Label)
+        whopper_container = QWidget()
+        bkw_box = QVBoxLayout(whopper_container)
+        bkw_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        whopperpath = os.path.join(base_path, "images", "Whopper.png")
+        whopperphoto = QPixmap(whopperpath)
+        self.whopperlabel = ClickableLabel()  
+
+        if whopperphoto.isNull():
+            print(f"Failed to load image at: {whopperpath}")
+        else:
+            self.whopperlabel.setPixmap(whopperphoto)
+            self.whopperlabel.setScaledContents(True)        
+        self.whopperlabel.setFixedSize(250, 250)
+
+        self.whopper_text_label = QLabel(wdisplay_text)
+        self.whopper_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.whopper_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.whopperlabel.clicked.connect(lambda checked=False, name=w_itemname: self.handle_food_click(name))
+
+        bkw_box.addWidget(self.whopperlabel)
+        bkw_box.addWidget(self.whopper_text_label)
+
+        # --- Fries Item ---
+        fprice = f"- $5.50"
+        fdisplay_text = f"BK Fries {fprice}"
+        f_itemname = "Bk Fries"
+
+        fries_container = QWidget()
+        f_box = QVBoxLayout(fries_container)
+        f_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        fpath = os.path.join(base_path, "images", "BkFries.png")
+        fphoto = QPixmap(fpath)
+        self.bkflabel = ClickableLabel()  
+
+        if fphoto.isNull():
+            print(f"Failed to load image at: {fpath}")
+        else:
+            self.bkflabel.setPixmap(fphoto)
+            self.bkflabel.setScaledContents(True)        
+        self.bkflabel.setFixedSize(250, 250)
+
+        self.bkf_text_label = QLabel(fdisplay_text)
+        self.bkf_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.bkf_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.bkflabel.clicked.connect(lambda checked=False, name=f_itemname: self.handle_food_click(name))
+
+        f_box.addWidget(self.bkflabel)
+        f_box.addWidget(self.bkf_text_label)
+
+        layout.addWidget(whopper_container, 0, 0)  
+        layout.addWidget(fries_container, 0, 1)
+        
+        main_outer_layout.addLayout(layout)
+        main_outer_layout.addStretch()
+        
         return page
+
+
 
     def create_burgerfuel(self):
         page = QWidget()
+        
+        main_outer_layout = QVBoxLayout()
+        page.setLayout(main_outer_layout)
+
+        header_layout = QHBoxLayout()
+        
+        self.burgerfuel_back_button = QPushButton("← Go Home")
+        self.burgerfuel_back_button.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Home))
+        self.burgerfuel_back_button.setFixedWidth(100) 
+        
+        header_layout.addWidget(self.burgerfuel_back_button)
+        header_layout.addStretch()
+        
+        main_outer_layout.addLayout(header_layout)
+
         layout = QGridLayout()
-        page.setLayout(layout)
 
-        self.Label = QLabel("This is the BurgerFuel Store Page")
+        base_path = os.path.dirname(os.path.abspath(__file__))
+        price = f"- $25.00"
+        display_text = f"Bacon Backfire {price}"
+        itemname = "Bacon Backfire"
 
-        layout.addWidget(self.Label)
+        baconbackfire_container = QWidget()
+        v_box = QVBoxLayout(baconbackfire_container)
+        v_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        baconbackfirepath = os.path.join(base_path, "images", "BaconBackfire.png")
+        baconbackfirephoto = QPixmap(baconbackfirepath)
+        self.baconbackfirelabel = ClickableLabel()  
+
+        if baconbackfirephoto.isNull():
+            print(f"Failed to load image at: {baconbackfirepath}")
+        else:
+            self.baconbackfirelabel.setPixmap(baconbackfirephoto)
+            self.baconbackfirelabel.setScaledContents(True)        
+        self.baconbackfirelabel.setFixedSize(250, 250)
+
+        self.baconbackfire_text_label = QLabel(display_text)
+        self.baconbackfire_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.baconbackfire_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.baconbackfirelabel.clicked.connect(lambda: self.handle_food_click(itemname))
+
+        v_box.addWidget(self.baconbackfirelabel)
+        v_box.addWidget(self.baconbackfire_text_label)
+
+        # --- Fries Item ---
+        fprice = f"- $10"
+        fdisplay_text = f"BurgerFuel Fries {fprice}"
+        f_itemname = "BurgerFuel Fries"
+
+        fries_container = QWidget()
+        f_box = QVBoxLayout(fries_container)
+        f_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        fpath = os.path.join(base_path, "images", "BkFries.png")
+        fphoto = QPixmap(fpath)
+        self.bfflabel = ClickableLabel()  
+
+        if fphoto.isNull():
+            print(f"Failed to load image at: {fpath}")
+        else:
+            self.bfflabel.setPixmap(fphoto)
+            self.bfflabel.setScaledContents(True)        
+        self.bfflabel.setFixedSize(250, 250)
+
+        self.bff_text_label = QLabel(fdisplay_text)
+        self.bff_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.bff_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.bfflabel.clicked.connect(lambda checked=False, name=f_itemname: self.handle_food_click(name))
+
+        f_box.addWidget(self.bfflabel)
+        f_box.addWidget(self.bff_text_label)
+
+        layout.addWidget(baconbackfire_container, 0, 0) 
+        layout.addWidget()
+        
+        main_outer_layout.addLayout(layout)
+        
         return page
         
     def create_dominoes(self):
         page = QWidget()
+        
+        main_outer_layout = QVBoxLayout()
+        page.setLayout(main_outer_layout)
+
+        header_layout = QHBoxLayout()
+        
+        self.dominoes_back_button = QPushButton("← Go Home")
+        self.dominoes_back_button.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Home))
+        self.dominoes_back_button.setFixedWidth(100) 
+        
+        header_layout.addWidget(self.dominoes_back_button)
+        header_layout.addStretch()
+        
+        main_outer_layout.addLayout(header_layout)
+
         layout = QGridLayout()
-        page.setLayout(layout)
 
-        self.Label = QLabel("This is the Dominoes Store Page")
+        base_path = os.path.dirname(os.path.abspath(__file__))
+        price = f"- $15.00"
+        display_text = f"Pepperoni Pizza (Dominoes) {price}"
+        itemname = "Pepperoni Pizza - (Dominoes)"
 
-        layout.addWidget(self.Label)
+        Dpepperoni_container = QWidget()
+        v_box = QVBoxLayout(Dpepperoni_container)
+        v_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        Dpepperonipath = os.path.join(base_path, "images", "DPepperoniPizza.png")
+        Dpepperoniphoto = QPixmap(Dpepperonipath)   
+        self.Dpepperonilabel = ClickableLabel()  
+
+        if Dpepperoniphoto.isNull():
+            print(f"Failed to load image at: {Dpepperonipath}")
+        else:
+            self.Dpepperonilabel.setPixmap(Dpepperoniphoto)
+            self.Dpepperonilabel.setScaledContents(True)        
+        self.Dpepperonilabel.setFixedSize(250, 250)
+
+        self.Dpepperon_text_label = QLabel(display_text)
+        self.Dpepperon_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.Dpepperon_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.Dpepperonilabel.clicked.connect(lambda: self.handle_food_click(itemname))
+
+        v_box.addWidget(self.Dpepperonilabel)
+        v_box.addWidget(self.Dpepperon_text_label)
+
+        layout.addWidget(Dpepperoni_container, 0, 0) 
+        
+        main_outer_layout.addLayout(layout)
+        
         return page
+
                 
     def create_pizzahut(self):
         page = QWidget()
+        
+        main_outer_layout = QVBoxLayout()
+        page.setLayout(main_outer_layout)
+
+        header_layout = QHBoxLayout()
+        
+        self.p_pizza_back_button = QPushButton("← Go Home")
+        self.p_pizza_back_button.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Home))
+        self.p_pizza_back_button.setFixedWidth(100) 
+        
+        header_layout.addWidget(self.p_pizza_back_button)
+        header_layout.addStretch()
+        
+        main_outer_layout.addLayout(header_layout)
+
         layout = QGridLayout()
-        page.setLayout(layout)
 
-        self.Label = QLabel("This is the PizzaHut Store Page")
+        base_path = os.path.dirname(os.path.abspath(__file__))
+        price = f"- $15.00"
+        display_text = f"Pepperoni Pizza (pizzahut) {price}"
+        itemname = "Pepperoni Pizza (PizzaHut)"
 
-        layout.addWidget(self.Label)
+        Ppepperoni_container = QWidget()
+        v_box = QVBoxLayout(Ppepperoni_container)
+        v_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        Ppepperonipath = os.path.join(base_path, "images", "PPepperoniPizza.png")
+        Ppepperoniphoto = QPixmap(Ppepperonipath)
+        self.Ppepperonilabel = ClickableLabel()  
+
+        if Ppepperoniphoto.isNull():
+            print(f"Failed to load image at: {Ppepperonipath}")
+        else:
+            self.Ppepperonilabel.setPixmap(Ppepperoniphoto)
+            self.Ppepperonilabel.setScaledContents(True)        
+        self.Ppepperonilabel.setFixedSize(250, 250)
+
+        self.Ppepperon_text_label = QLabel(display_text)
+        self.Ppepperon_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.Ppepperon_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.Ppepperonilabel.clicked.connect(lambda: self.handle_food_click(itemname))
+
+        v_box.addWidget(self.Ppepperonilabel)
+        v_box.addWidget(self.Ppepperon_text_label)
+
+        layout.addWidget(Ppepperoni_container, 0, 0) 
+        
+        main_outer_layout.addLayout(layout)
+        
         return page
+
+
         
     def create_pizzagods(self):
         page = QWidget()
+        
+        main_outer_layout = QVBoxLayout()
+        page.setLayout(main_outer_layout)
+
+        header_layout = QHBoxLayout()
+        
+        self.pizza_back_button = QPushButton("← Go Home")
+        self.pizza_back_button.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Home))
+        self.pizza_back_button.setFixedWidth(100) 
+        
+        header_layout.addWidget(self.pizza_back_button)
+        header_layout.addStretch()
+        
+        main_outer_layout.addLayout(header_layout)
+
         layout = QGridLayout()
-        page.setLayout(layout)
 
-        self.Label = QLabel("This is the PizzaGods Store Page")
+        base_path = os.path.dirname(os.path.abspath(__file__))
+        price = f"- $12.00"
+        display_text = f"Pepperoni Pizza (pizzagods) {price}"
+        itemname = "Pepperoni Pizza (PizzaGods)"
 
-        layout.addWidget(self.Label)
+        Gpepperoni_container = QWidget()
+        v_box = QVBoxLayout(Gpepperoni_container)
+        v_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        Gpepperonipath = os.path.join(base_path, "images", "GPepperoniPizza.png")
+        Gpepperoniphoto = QPixmap(Gpepperonipath)
+        self.Gpepperonilabel = ClickableLabel()  
+
+        if Gpepperoniphoto.isNull():
+            print(f"Failed to load image at: {Gpepperonipath}")
+        else:
+            self.Gpepperonilabel.setPixmap(Gpepperoniphoto)
+            self.Gpepperonilabel.setScaledContents(True)        
+        self.Gpepperonilabel.setFixedSize(250, 250)
+
+        self.Gpepperon_text_label = QLabel(display_text)
+        self.Gpepperon_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.Gpepperon_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.Gpepperonilabel.clicked.connect(lambda: self.handle_food_click(itemname))
+
+        v_box.addWidget(self.Gpepperonilabel)
+        v_box.addWidget(self.Gpepperon_text_label)
+
+        layout.addWidget(Gpepperoni_container, 0, 0) 
+        
+        main_outer_layout.addLayout(layout)
+        
         return page
+
+
         
     def create_kfc(self):
         page = QWidget()
+        
+        main_outer_layout = QVBoxLayout()
+        page.setLayout(main_outer_layout)
+
+        header_layout = QHBoxLayout()
+        
+        self.bucket_back_button = QPushButton("← Go Home")
+        self.bucket_back_button.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Home))
+        self.bucket_back_button.setFixedWidth(100) 
+        
+        header_layout.addWidget(self.bucket_back_button)
+        header_layout.addStretch()
+        
+        main_outer_layout.addLayout(header_layout)
+
         layout = QGridLayout()
-        page.setLayout(layout)
 
-        self.Label = QLabel("This is the KFC Store Page")
+        base_path = os.path.dirname(os.path.abspath(__file__))
+        price = f"- $25.00"
+        display_text = f"Medium Chicken Bucket {price}"
+        itemname = "Medium Chicken Bucket"
 
-        layout.addWidget(self.Label)
+        bucketM_container = QWidget()
+        v_box = QVBoxLayout(bucketM_container)
+        v_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        bucketMpath = os.path.join(base_path, "images", "BucketM.png")
+        bucketMphoto = QPixmap(bucketMpath)
+        self.bucketMlabel = ClickableLabel()  
+
+        if bucketMphoto.isNull():
+            print(f"Failed to load image at: {bucketMpath}")
+        else:
+            self.bucketMlabel.setPixmap(bucketMphoto)
+            self.bucketMlabel.setScaledContents(True)        
+        self.bucketMlabel.setFixedSize(250, 250)
+
+        self.bucketM_text_label = QLabel(display_text)
+        self.bucketM_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.bucketM_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.bucketMlabel.clicked.connect(lambda: self.handle_food_click(itemname))
+
+        v_box.addWidget(self.bucketMlabel)
+        v_box.addWidget(self.bucketM_text_label)
+
+        layout.addWidget(bucketM_container, 0, 0) 
+        
+        main_outer_layout.addLayout(layout)
+        
         return page
+
+
         
     def create_subway(self):
         page = QWidget()
+        
+        main_outer_layout = QVBoxLayout()
+        page.setLayout(main_outer_layout)
+
+        header_layout = QHBoxLayout()
+        
+        self.subway_back_button = QPushButton("← Go Home")
+        self.subway_back_button.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Home))
+        self.subway_back_button.setFixedWidth(100) 
+        
+        header_layout.addWidget(self.subway_back_button)
+        header_layout.addStretch()
+        
+        main_outer_layout.addLayout(header_layout)
+
         layout = QGridLayout()
-        page.setLayout(layout)
 
-        self.Label = QLabel("This is the Subway Store Page")
+        base_path = os.path.dirname(os.path.abspath(__file__))
+        price = f"- $15"
+        display_text = f"Meatball Sub {price}"
+        itemname = "Meatball Sub"
 
-        layout.addWidget(self.Label)
+        meatball_container = QWidget()
+        v_box = QVBoxLayout(meatball_container)
+        v_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        meatballpath = os.path.join(base_path, "images", "MeatBall.png")
+        meatballphoto = QPixmap(meatballpath)
+        self.meatballlabel = ClickableLabel()  
+
+        if meatballphoto.isNull():
+            print(f"Failed to load image at: {meatballpath}")
+        else:
+            self.meatballlabel.setPixmap(meatballphoto)
+            self.meatballlabel.setScaledContents(True)        
+        self.meatballlabel.setFixedSize(250, 250)
+
+        self.meatball_text_label = QLabel(display_text)
+        self.meatball_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.meatball_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.meatballlabel.clicked.connect(lambda: self.handle_food_click(itemname))
+
+        v_box.addWidget(self.meatballlabel)
+        v_box.addWidget(self.meatball_text_label)
+
+        layout.addWidget(meatball_container, 0, 0) 
+        
+        main_outer_layout.addLayout(layout)
+        
         return page
         
     def create_sale(self):
@@ -727,26 +1254,72 @@ class MainWindow(QMainWindow):
         return page
         
     def handle_food_click(self, item_name):
-            """
-            Spawns the dynamic popup window. If the 'Add to List' button is 
-            pressed, it extracts the target string and populates the list widget.
-            """
-            popup = FoodPopup(item_name, self)
+        popup = FoodPopup(item_name, self)
+        
+        if popup.exec_() == QDialog.Accepted:
+            self.checkout_list.addItem(f"Ordered: {item_name}") 
             
-            # If the user clicks 'Add to List'
-            if popup.exec_() == QDialog.Accepted:
-                # Assuming you have a QListWidget named self.list_widget in your main UI layout
-                self.list_widget.addItem(f"Ordered: {item_name}") 
+            if item_name.lower() in self.MAIN_MEALS:
+                mealpopup = MealPopup(item_name, self)
+                if mealpopup.exec_() == QDialog.Accepted:
+                    print("Upgraded to a full combo meal! Adding $5.")
+                    
+                    last_row = self.checkout_list.count() - 1
+                    last_item = self.checkout_list.item(last_row)
+                    last_item.setText(f"Ordered: {item_name} - MEAL ({item_name} + Fries + Drink)")
+                    
+                    cart_text = "This is the checkout Page\n\n--- Current Cart Contents ---\n"
+                    for row in range(self.checkout_list.count()):
+                        item = self.checkout_list.item(row) 
+                        cart_text += f"- {item.text()}\n"
+                    cart_text += "-----------------------------"
+                    self.checkout_label.setText(cart_text)
+                    
+                else:
+                    print("User declined the meal upgrade.")
+                    cart_text = "This is the Checkout Page\n\n--- Current Cart Contents ---\n"
+                    for row in range(self.checkout_list.count()):
+                        item = self.checkout_list.item(row)
+                        cart_text += f"- {item.text()}\n" 
+                    cart_text += "-----------------------------"                    
+                    self.checkout_label.setText(cart_text)
+            else:
+                cart_text = "This is the Checkout Page\n\n--- Current Cart Contents ---\n"
+                for row in range(self.checkout_list.count()):
+                    item = self.checkout_list.item(row)
+                    cart_text += f"- {item.text()}\n" 
+                cart_text += "-----------------------------"                    
+                self.checkout_label.setText(cart_text)
+
+
     def create_checkout(self):
         page = QWidget()
-        layout = QGridLayout()
-        page.setLayout(layout)
-
-        self.Label = QLabel("This is the Checkout Page")
-
-        layout.addWidget(self.Label)
-        return page
         
+        main_outer_layout = QVBoxLayout()
+        page.setLayout(main_outer_layout)
+
+        header_layout = QHBoxLayout()
+        
+        self.checkout_back_button = QPushButton("← Go Home")
+        self.checkout_back_button.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Home))
+        self.checkout_back_button.setFixedWidth(100) 
+        
+        header_layout.addWidget(self.checkout_back_button)
+        header_layout.addStretch()
+        
+        main_outer_layout.addLayout(header_layout)
+
+        layout = QGridLayout()
+
+        self.checkout_label = QLabel("This is the Checkout Page\n\nCart is empty.")
+        self.checkout_label.setWordWrap(True)
+
+        layout.addWidget(self.checkout_label)
+        
+        main_outer_layout.addLayout(layout)
+        
+        return page
+
 
 app = QApplication(sys.argv)
 main_window = MainWindow()
