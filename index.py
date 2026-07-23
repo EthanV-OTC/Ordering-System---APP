@@ -384,6 +384,7 @@ class MainWindow(QMainWindow):
 
         self.register_pass = QLineEdit()
         self.register_pass.setPlaceholderText("Enter your Password here!")
+        self.register_pass.setEchoMode(QLineEdit.Password)
 
         self.register_status = QLabel("Invalid Email!! Please enter one with an '@_____.com' to proceed!!")
         self.register_status.setStyleSheet("color: red; font-size: 11px;")
@@ -785,6 +786,36 @@ class MainWindow(QMainWindow):
         f_box.addWidget(self.mcflabel)
         f_box.addWidget(self.mcf_text_label)
 
+        # --- Coke Item ---
+        cprice = f"- $4.50"
+        cdisplay_text = f"Can of Coke {cprice}"
+        c_itemname = "Can of Coke"
+
+        coke_container = QWidget()
+        c_box = QVBoxLayout(coke_container)
+        c_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        fpath = os.path.join(base_path, "images", "coke.png")
+        fphoto = QPixmap(fpath)
+        self.cokelabel = ClickableLabel()  
+
+        if fphoto.isNull():
+            print(f"Failed to load image at: {fpath}")
+        else:
+            self.cokelabel.setPixmap(fphoto)
+            self.cokelabel.setScaledContents(True)        
+        self.cokelabel.setFixedSize(250, 250)
+
+        self.coke_text_label = QLabel(cdisplay_text)
+        self.coke_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.coke_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname: self.handle_food_click(name))
+
+        c_box.addWidget(self.cokelabel)
+        c_box.addWidget(self.coke_text_label)
+        layout.addWidget(coke_container, 0, 2)
+
         layout.addWidget(bigmac_container, 0, 0) 
         layout.addWidget(fries_container, 0, 1)
         
@@ -872,6 +903,36 @@ class MainWindow(QMainWindow):
         f_box.addWidget(self.bkflabel)
         f_box.addWidget(self.bkf_text_label)
 
+        # --- Coke Item ---
+        cprice = f"- $4.50"
+        cdisplay_text = f"Can of Coke {cprice}"
+        c_itemname = "Can of Coke"
+
+        coke_container = QWidget()
+        c_box = QVBoxLayout(coke_container)
+        c_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        fpath = os.path.join(base_path, "images", "coke.png")
+        fphoto = QPixmap(fpath)
+        self.cokelabel = ClickableLabel()  
+
+        if fphoto.isNull():
+            print(f"Failed to load image at: {fpath}")
+        else:
+            self.cokelabel.setPixmap(fphoto)
+            self.cokelabel.setScaledContents(True)        
+        self.cokelabel.setFixedSize(250, 250)
+
+        self.coke_text_label = QLabel(cdisplay_text)
+        self.coke_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.coke_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname: self.handle_food_click(name))
+
+        c_box.addWidget(self.cokelabel)
+        c_box.addWidget(self.coke_text_label)
+        layout.addWidget(coke_container, 0, 2)
+
         layout.addWidget(whopper_container, 0, 0)  
         layout.addWidget(fries_container, 0, 1)
         
@@ -879,8 +940,6 @@ class MainWindow(QMainWindow):
         main_outer_layout.addStretch()
         
         return page
-
-
 
     def create_burgerfuel(self):
         page = QWidget()
@@ -939,7 +998,7 @@ class MainWindow(QMainWindow):
         f_box = QVBoxLayout(fries_container)
         f_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        fpath = os.path.join(base_path, "images", "BkFries.png")
+        fpath = os.path.join(base_path, "images", "BfFries.png")
         fphoto = QPixmap(fpath)
         self.bfflabel = ClickableLabel()  
 
@@ -959,11 +1018,42 @@ class MainWindow(QMainWindow):
         f_box.addWidget(self.bfflabel)
         f_box.addWidget(self.bff_text_label)
 
+        # --- Coke Item ---
+        cprice = f"- $4.50"
+        cdisplay_text = f"Can of Coke {cprice}"
+        c_itemname = "Can of Coke"
+
+        coke_container = QWidget()
+        c_box = QVBoxLayout(coke_container)
+        c_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        fpath = os.path.join(base_path, "images", "coke.png")
+        fphoto = QPixmap(fpath)
+        self.cokelabel = ClickableLabel()  
+
+        if fphoto.isNull():
+            print(f"Failed to load image at: {fpath}")
+        else:
+            self.cokelabel.setPixmap(fphoto)
+            self.cokelabel.setScaledContents(True)        
+        self.cokelabel.setFixedSize(250, 250)
+
+        self.coke_text_label = QLabel(cdisplay_text)
+        self.coke_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.coke_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname: self.handle_food_click(name))
+
+        c_box.addWidget(self.cokelabel)
+        c_box.addWidget(self.coke_text_label)
+        layout.addWidget(coke_container, 0, 2)
+
         layout.addWidget(baconbackfire_container, 0, 0) 
-        layout.addWidget()
+        layout.addWidget(fries_container, 0, 1)
         
         main_outer_layout.addLayout(layout)
-        
+        main_outer_layout.addStretch()
+
         return page
         
     def create_dominoes(self):
@@ -1014,9 +1104,70 @@ class MainWindow(QMainWindow):
         v_box.addWidget(self.Dpepperonilabel)
         v_box.addWidget(self.Dpepperon_text_label)
 
+        # --- GarlicBread Item ---
+        gprice = f"- $6.90"
+        gdisplay_text = f"Garlic Bread (Dominoes) {gprice}"
+        g_itemname = "Garlic Bread - (Dominoes)"
+
+        bread_container = QWidget()
+        g_box = QVBoxLayout(bread_container)
+        g_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        gpath = os.path.join(base_path, "images", "DGB.png")
+        gphoto = QPixmap(gpath)
+        self.dgblabel = ClickableLabel()  
+
+        if gphoto.isNull():
+            print(f"Failed to load image at: {gpath}")
+        else:
+            self.dgblabel.setPixmap(gphoto)
+            self.dgblabel.setScaledContents(True)        
+        self.dgblabel.setFixedSize(250, 250)
+
+        self.dgb_text_label = QLabel(gdisplay_text)
+        self.dgb_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.dgb_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.dgblabel.clicked.connect(lambda checked=False, name=g_itemname: self.handle_food_click(name))
+
+        g_box.addWidget(self.dgblabel)
+        g_box.addWidget(self.dgb_text_label)
+
+        # --- Coke Item ---
+        cprice = f"- $4.50"
+        cdisplay_text = f"Can of Coke {cprice}"
+        c_itemname = "Can of Coke"
+
+        coke_container = QWidget()
+        c_box = QVBoxLayout(coke_container)
+        c_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        fpath = os.path.join(base_path, "images", "coke.png")
+        fphoto = QPixmap(fpath)
+        self.cokelabel = ClickableLabel()  
+
+        if fphoto.isNull():
+            print(f"Failed to load image at: {fpath}")
+        else:
+            self.cokelabel.setPixmap(fphoto)
+            self.cokelabel.setScaledContents(True)        
+        self.cokelabel.setFixedSize(250, 250)
+
+        self.coke_text_label = QLabel(cdisplay_text)
+        self.coke_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.coke_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname: self.handle_food_click(name))
+
+        c_box.addWidget(self.cokelabel)
+        c_box.addWidget(self.coke_text_label)
+        layout.addWidget(coke_container, 0, 2)
+
         layout.addWidget(Dpepperoni_container, 0, 0) 
+        layout.addWidget(bread_container, 0, 1)
         
         main_outer_layout.addLayout(layout)
+                
         
         return page
 
@@ -1069,7 +1220,67 @@ class MainWindow(QMainWindow):
         v_box.addWidget(self.Ppepperonilabel)
         v_box.addWidget(self.Ppepperon_text_label)
 
+        # --- GarlicBread Item ---
+        gprice = f"- $7.60"
+        gdisplay_text = f"Garlic Bread (Pizza Hut) {gprice}"
+        g_itemname = "Garlic Bread - (Pizza Hut)"
+
+        bread_container = QWidget()
+        g_box = QVBoxLayout(bread_container)
+        g_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        gpath = os.path.join(base_path, "images", "PGB.png")
+        gphoto = QPixmap(gpath)
+        self.pgblabel = ClickableLabel()  
+
+        if gphoto.isNull():
+            print(f"Failed to load image at: {gpath}")
+        else:
+            self.pgblabel.setPixmap(gphoto)
+            self.pgblabel.setScaledContents(True)        
+        self.pgblabel.setFixedSize(250, 250)
+
+        self.pgb_text_label = QLabel(gdisplay_text)
+        self.pgb_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.pgb_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.pgblabel.clicked.connect(lambda checked=False, name=g_itemname: self.handle_food_click(name))
+
+        g_box.addWidget(self.pgblabel)
+        g_box.addWidget(self.pgb_text_label)
+
+        # --- Coke Item ---
+        cprice = f"- $4.50"
+        cdisplay_text = f"Can of Coke {cprice}"
+        c_itemname = "Can of Coke"
+
+        coke_container = QWidget()
+        c_box = QVBoxLayout(coke_container)
+        c_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        fpath = os.path.join(base_path, "images", "coke.png")
+        fphoto = QPixmap(fpath)
+        self.cokelabel = ClickableLabel()  
+
+        if fphoto.isNull():
+            print(f"Failed to load image at: {fpath}")
+        else:
+            self.cokelabel.setPixmap(fphoto)
+            self.cokelabel.setScaledContents(True)        
+        self.cokelabel.setFixedSize(250, 250)
+
+        self.coke_text_label = QLabel(cdisplay_text)
+        self.coke_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.coke_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname: self.handle_food_click(name))
+
+        c_box.addWidget(self.cokelabel)
+        c_box.addWidget(self.coke_text_label)
+        layout.addWidget(coke_container, 0, 2)
+
         layout.addWidget(Ppepperoni_container, 0, 0) 
+        layout.addWidget(bread_container, 0, 1)
         
         main_outer_layout.addLayout(layout)
         
@@ -1125,7 +1336,67 @@ class MainWindow(QMainWindow):
         v_box.addWidget(self.Gpepperonilabel)
         v_box.addWidget(self.Gpepperon_text_label)
 
+        # --- GarlicBread Item ---
+        gprice = f"- $5"
+        gdisplay_text = f"Garlic Bread (Pizza Gods) {gprice}"
+        g_itemname = "Garlic Bread - (Pizza Gods)"
+
+        bread_container = QWidget()
+        g_box = QVBoxLayout(bread_container)
+        g_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        gpath = os.path.join(base_path, "images", "PGGB.png")
+        gphoto = QPixmap(gpath)
+        self.pggblabel = ClickableLabel()  
+
+        if gphoto.isNull():
+            print(f"Failed to load image at: {gpath}")
+        else:
+            self.pggblabel.setPixmap(gphoto)
+            self.pggblabel.setScaledContents(True)        
+        self.pggblabel.setFixedSize(250, 250)
+
+        self.pggb_text_label = QLabel(gdisplay_text)
+        self.pggb_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.pggb_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.pggblabel.clicked.connect(lambda checked=False, name=g_itemname: self.handle_food_click(name))
+
+        g_box.addWidget(self.pggblabel)
+        g_box.addWidget(self.pggb_text_label)
+
+        # --- Coke Item ---
+        cprice = f"- $4.50"
+        cdisplay_text = f"Can of Coke {cprice}"
+        c_itemname = "Can of Coke"
+
+        coke_container = QWidget()
+        c_box = QVBoxLayout(coke_container)
+        c_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        fpath = os.path.join(base_path, "images", "coke.png")
+        fphoto = QPixmap(fpath)
+        self.cokelabel = ClickableLabel()  
+
+        if fphoto.isNull():
+            print(f"Failed to load image at: {fpath}")
+        else:
+            self.cokelabel.setPixmap(fphoto)
+            self.cokelabel.setScaledContents(True)        
+        self.cokelabel.setFixedSize(250, 250)
+
+        self.coke_text_label = QLabel(cdisplay_text)
+        self.coke_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.coke_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname: self.handle_food_click(name))
+
+        c_box.addWidget(self.cokelabel)
+        c_box.addWidget(self.coke_text_label)
+        layout.addWidget(coke_container, 0, 2)
+        
         layout.addWidget(Gpepperoni_container, 0, 0) 
+        layout.addWidget(bread_container, 0, 1)
         
         main_outer_layout.addLayout(layout)
         
@@ -1181,7 +1452,67 @@ class MainWindow(QMainWindow):
         v_box.addWidget(self.bucketMlabel)
         v_box.addWidget(self.bucketM_text_label)
 
+        # --- Fries Item ---
+        fprice = f"- $6.70"
+        fdisplay_text = f"KFC Fries {fprice}"
+        f_itemname = "KFC Fries"
+
+        fries_container = QWidget()
+        f_box = QVBoxLayout(fries_container)
+        f_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        fpath = os.path.join(base_path, "images", "kfcfries.png")
+        fphoto = QPixmap(fpath)
+        self.kfcflabel = ClickableLabel()  
+
+        if fphoto.isNull():
+            print(f"Failed to load image at: {fpath}")
+        else:
+            self.kfcflabel.setPixmap(fphoto)
+            self.kfcflabel.setScaledContents(True)        
+        self.kfcflabel.setFixedSize(250, 250)
+
+        self.kfcf_text_label = QLabel(fdisplay_text)
+        self.kfcf_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.kfcf_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.kfcflabel.clicked.connect(lambda checked=False, name=f_itemname: self.handle_food_click(name))
+
+        f_box.addWidget(self.kfcflabel)
+        f_box.addWidget(self.kfcf_text_label)
+
+        # --- Coke Item ---
+        cprice = f"- $4.50"
+        cdisplay_text = f"Can of Coke {cprice}"
+        c_itemname = "Can of Coke"
+
+        coke_container = QWidget()
+        c_box = QVBoxLayout(coke_container)
+        c_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        fpath = os.path.join(base_path, "images", "coke.png")
+        fphoto = QPixmap(fpath)
+        self.cokelabel = ClickableLabel()  
+
+        if fphoto.isNull():
+            print(f"Failed to load image at: {fpath}")
+        else:
+            self.cokelabel.setPixmap(fphoto)
+            self.cokelabel.setScaledContents(True)        
+        self.cokelabel.setFixedSize(250, 250)
+
+        self.coke_text_label = QLabel(cdisplay_text)
+        self.coke_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.coke_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname: self.handle_food_click(name))
+
+        c_box.addWidget(self.cokelabel)
+        c_box.addWidget(self.coke_text_label)
+        layout.addWidget(coke_container, 0, 2)      
+
         layout.addWidget(bucketM_container, 0, 0) 
+        layout.addWidget(fries_container, 0, 1)
         
         main_outer_layout.addLayout(layout)
         
@@ -1237,7 +1568,67 @@ class MainWindow(QMainWindow):
         v_box.addWidget(self.meatballlabel)
         v_box.addWidget(self.meatball_text_label)
 
-        layout.addWidget(meatball_container, 0, 0) 
+        # --- Cookie Item ---
+        fprice = f"- $2"
+        fdisplay_text = f"Cookie {fprice}"
+        f_itemname = "Cookie"
+
+        cookie_container = QWidget()
+        f_box = QVBoxLayout(cookie_container)
+        f_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        fpath = os.path.join(base_path, "images", "Cookie.png")
+        fphoto = QPixmap(fpath)
+        self.cookielabel = ClickableLabel()  
+
+        if fphoto.isNull():
+            print(f"Failed to load image at: {fpath}")
+        else:
+            self.cookielabel.setPixmap(fphoto)
+            self.cookielabel.setScaledContents(True)        
+        self.cookielabel.setFixedSize(250, 250)
+
+        self.cookie_text_label = QLabel(fdisplay_text)
+        self.cookie_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.cookie_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.cookielabel.clicked.connect(lambda checked=False, name=f_itemname: self.handle_food_click(name))
+
+        f_box.addWidget(self.cookielabel)
+        f_box.addWidget(self.cookie_text_label)
+
+        # --- Coke Item ---
+        cprice = f"- $4.50"
+        cdisplay_text = f"Can of Coke {cprice}"
+        c_itemname = "Can of Coke"
+
+        coke_container = QWidget()
+        c_box = QVBoxLayout(coke_container)
+        c_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        fpath = os.path.join(base_path, "images", "coke.png")
+        fphoto = QPixmap(fpath)
+        self.cokelabel = ClickableLabel()  
+
+        if fphoto.isNull():
+            print(f"Failed to load image at: {fpath}")
+        else:
+            self.cokelabel.setPixmap(fphoto)
+            self.cokelabel.setScaledContents(True)        
+        self.cokelabel.setFixedSize(250, 250)
+
+        self.coke_text_label = QLabel(cdisplay_text)
+        self.coke_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.coke_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+
+        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname: self.handle_food_click(name))
+
+        c_box.addWidget(self.cokelabel)
+        c_box.addWidget(self.coke_text_label)
+        layout.addWidget(coke_container, 0, 2)
+
+        layout.addWidget(meatball_container, 0, 0)
+        layout.addWidget(cookie_container, 0, 1) 
         
         main_outer_layout.addLayout(layout)
         
