@@ -79,6 +79,7 @@ class MainWindow(QMainWindow):
 
         self.is_logged_in = False
         self.MAIN_MEALS = ["big mac", "whopper", "bacon backfire", "pepperoni pizza (dominoes)", "pepperoni pizza (pizzahut)", "pepperoni pizza (pizzagods)", "medium chicken bucket", "meatball sub"]
+        self.total_price = 0.0
 
         main_container = QWidget()
         main_layout = QVBoxLayout(main_container)
@@ -752,7 +753,7 @@ class MainWindow(QMainWindow):
         self.bigmac_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
 
-        self.bigmaclabel.clicked.connect(lambda checked=False, name=bm_itemname: self.handle_food_click(name))
+        self.bigmaclabel.clicked.connect(lambda checked=False, name=bm_itemname, price=10.50: self.handle_food_click(name, price))
 
         bm_box.addWidget(self.bigmaclabel)
         bm_box.addWidget(self.bigmac_text_label)
@@ -781,7 +782,7 @@ class MainWindow(QMainWindow):
         self.mcf_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.mcf_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.mcflabel.clicked.connect(lambda checked=False, name=f_itemname: self.handle_food_click(name))
+        self.mcflabel.clicked.connect(lambda checked=False, name=f_itemname, price=4.50: self.handle_food_click(name, price))
 
         f_box.addWidget(self.mcflabel)
         f_box.addWidget(self.mcf_text_label)
@@ -810,7 +811,7 @@ class MainWindow(QMainWindow):
         self.coke_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.coke_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname: self.handle_food_click(name))
+        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname, price=4.50: self.handle_food_click(name, price))
 
         c_box.addWidget(self.cokelabel)
         c_box.addWidget(self.coke_text_label)
@@ -869,7 +870,7 @@ class MainWindow(QMainWindow):
         self.whopper_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.whopper_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.whopperlabel.clicked.connect(lambda checked=False, name=w_itemname: self.handle_food_click(name))
+        self.whopperlabel.clicked.connect(lambda checked=False, name=w_itemname, price=12.00: self.handle_food_click(name, price))
 
         bkw_box.addWidget(self.whopperlabel)
         bkw_box.addWidget(self.whopper_text_label)
@@ -898,7 +899,7 @@ class MainWindow(QMainWindow):
         self.bkf_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.bkf_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.bkflabel.clicked.connect(lambda checked=False, name=f_itemname: self.handle_food_click(name))
+        self.bkflabel.clicked.connect(lambda checked=False, name=f_itemname, price=5.50: self.handle_food_click(name, price))
 
         f_box.addWidget(self.bkflabel)
         f_box.addWidget(self.bkf_text_label)
@@ -927,7 +928,7 @@ class MainWindow(QMainWindow):
         self.coke_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.coke_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname: self.handle_food_click(name))
+        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname, price=4.50: self.handle_food_click(name, price))
 
         c_box.addWidget(self.cokelabel)
         c_box.addWidget(self.coke_text_label)
@@ -984,7 +985,7 @@ class MainWindow(QMainWindow):
         self.baconbackfire_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.baconbackfire_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.baconbackfirelabel.clicked.connect(lambda: self.handle_food_click(itemname))
+        self.baconbackfirelabel.clicked.connect(lambda checked=False, name=itemname, price=25.00: self.handle_food_click(name, price))
 
         v_box.addWidget(self.baconbackfirelabel)
         v_box.addWidget(self.baconbackfire_text_label)
@@ -1013,7 +1014,7 @@ class MainWindow(QMainWindow):
         self.bff_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.bff_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.bfflabel.clicked.connect(lambda checked=False, name=f_itemname: self.handle_food_click(name))
+        self.bfflabel.clicked.connect(lambda checked=False, name=f_itemname, price=10.00: self.handle_food_click(name, price))
 
         f_box.addWidget(self.bfflabel)
         f_box.addWidget(self.bff_text_label)
@@ -1042,7 +1043,7 @@ class MainWindow(QMainWindow):
         self.coke_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.coke_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname: self.handle_food_click(name))
+        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname, price=4.50: self.handle_food_click(name, price))
 
         c_box.addWidget(self.cokelabel)
         c_box.addWidget(self.coke_text_label)
@@ -1099,7 +1100,7 @@ class MainWindow(QMainWindow):
         self.Dpepperon_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.Dpepperon_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.Dpepperonilabel.clicked.connect(lambda: self.handle_food_click(itemname))
+        self.Dpepperonilabel.clicked.connect(lambda checked=False, name=itemname, price=15.00: self.handle_food_click(name, price))
 
         v_box.addWidget(self.Dpepperonilabel)
         v_box.addWidget(self.Dpepperon_text_label)
@@ -1128,7 +1129,7 @@ class MainWindow(QMainWindow):
         self.dgb_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.dgb_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.dgblabel.clicked.connect(lambda checked=False, name=g_itemname: self.handle_food_click(name))
+        self.dgblabel.clicked.connect(lambda checked=False, name=g_itemname, price=6.90: self.handle_food_click(name, price))
 
         g_box.addWidget(self.dgblabel)
         g_box.addWidget(self.dgb_text_label)
@@ -1157,7 +1158,7 @@ class MainWindow(QMainWindow):
         self.coke_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.coke_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname: self.handle_food_click(name))
+        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname, price=4.50: self.handle_food_click(name, price))
 
         c_box.addWidget(self.cokelabel)
         c_box.addWidget(self.coke_text_label)
@@ -1215,7 +1216,7 @@ class MainWindow(QMainWindow):
         self.Ppepperon_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.Ppepperon_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.Ppepperonilabel.clicked.connect(lambda: self.handle_food_click(itemname))
+        self.Ppepperonilabel.clicked.connect(lambda checked=False, name=itemname, price=15.00: self.handle_food_click(name, price))
 
         v_box.addWidget(self.Ppepperonilabel)
         v_box.addWidget(self.Ppepperon_text_label)
@@ -1244,7 +1245,7 @@ class MainWindow(QMainWindow):
         self.pgb_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.pgb_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.pgblabel.clicked.connect(lambda checked=False, name=g_itemname: self.handle_food_click(name))
+        self.pgblabel.clicked.connect(lambda checked=False, name=g_itemname, price=7.60: self.handle_food_click(name, price))
 
         g_box.addWidget(self.pgblabel)
         g_box.addWidget(self.pgb_text_label)
@@ -1273,7 +1274,7 @@ class MainWindow(QMainWindow):
         self.coke_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.coke_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname: self.handle_food_click(name))
+        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname, price=4.50: self.handle_food_click(name, price))
 
         c_box.addWidget(self.cokelabel)
         c_box.addWidget(self.coke_text_label)
@@ -1327,14 +1328,14 @@ class MainWindow(QMainWindow):
             self.Gpepperonilabel.setScaledContents(True)        
         self.Gpepperonilabel.setFixedSize(250, 250)
 
-        self.Gpepperon_text_label = QLabel(display_text)
-        self.Gpepperon_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.Gpepperon_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
+        self.Gpepperoni_text_label = QLabel(display_text)
+        self.Gpepperoni_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.Gpepperoni_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.Gpepperonilabel.clicked.connect(lambda: self.handle_food_click(itemname))
+        self.Gpepperonilabel.clicked.connect(lambda checked=False, name=itemname, price=12.00: self.handle_food_click(name, price))
 
         v_box.addWidget(self.Gpepperonilabel)
-        v_box.addWidget(self.Gpepperon_text_label)
+        v_box.addWidget(self.Gpepperoni_text_label)
 
         # --- GarlicBread Item ---
         gprice = f"- $5"
@@ -1360,7 +1361,7 @@ class MainWindow(QMainWindow):
         self.pggb_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.pggb_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.pggblabel.clicked.connect(lambda checked=False, name=g_itemname: self.handle_food_click(name))
+        self.pggblabel.clicked.connect(lambda checked=False, name=g_itemname, price=5.00: self.handle_food_click(name, price))
 
         g_box.addWidget(self.pggblabel)
         g_box.addWidget(self.pggb_text_label)
@@ -1389,7 +1390,7 @@ class MainWindow(QMainWindow):
         self.coke_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.coke_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname: self.handle_food_click(name))
+        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname, price=4.50: self.handle_food_click(name, price))
 
         c_box.addWidget(self.cokelabel)
         c_box.addWidget(self.coke_text_label)
@@ -1447,7 +1448,7 @@ class MainWindow(QMainWindow):
         self.bucketM_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.bucketM_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.bucketMlabel.clicked.connect(lambda: self.handle_food_click(itemname))
+        self.bucketMlabel.clicked.connect(lambda checked=False, name=itemname, price=25.00: self.handle_food_click(name, price))
 
         v_box.addWidget(self.bucketMlabel)
         v_box.addWidget(self.bucketM_text_label)
@@ -1476,7 +1477,7 @@ class MainWindow(QMainWindow):
         self.kfcf_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.kfcf_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.kfcflabel.clicked.connect(lambda checked=False, name=f_itemname: self.handle_food_click(name))
+        self.kfcflabel.clicked.connect(lambda checked=False, name=f_itemname, price=6.70: self.handle_food_click(name, price))
 
         f_box.addWidget(self.kfcflabel)
         f_box.addWidget(self.kfcf_text_label)
@@ -1505,7 +1506,7 @@ class MainWindow(QMainWindow):
         self.coke_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.coke_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname: self.handle_food_click(name))
+        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname, price=4.50: self.handle_food_click(name, price))
 
         c_box.addWidget(self.cokelabel)
         c_box.addWidget(self.coke_text_label)
@@ -1563,7 +1564,7 @@ class MainWindow(QMainWindow):
         self.meatball_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.meatball_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.meatballlabel.clicked.connect(lambda: self.handle_food_click(itemname))
+        self.meatballlabel.clicked.connect(lambda checked=False, name=itemname, price=15.00: self.handle_food_click(name, price))
 
         v_box.addWidget(self.meatballlabel)
         v_box.addWidget(self.meatball_text_label)
@@ -1592,7 +1593,7 @@ class MainWindow(QMainWindow):
         self.cookie_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.cookie_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.cookielabel.clicked.connect(lambda checked=False, name=f_itemname: self.handle_food_click(name))
+        self.cookielabel.clicked.connect(lambda checked=False, name=f_itemname, price=2.00: self.handle_food_click(name, price))
 
         f_box.addWidget(self.cookielabel)
         f_box.addWidget(self.cookie_text_label)
@@ -1621,7 +1622,7 @@ class MainWindow(QMainWindow):
         self.coke_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.coke_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname: self.handle_food_click(name))
+        self.cokelabel.clicked.connect(lambda checked=False, name=c_itemname, price=4.50: self.handle_food_click(name, price))
 
         c_box.addWidget(self.cokelabel)
         c_box.addWidget(self.coke_text_label)
@@ -1644,44 +1645,54 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.Label)
         return page
         
-    def handle_food_click(self, item_name):
+    def handle_food_click(self, item_name, base_price=0.0):
         popup = FoodPopup(item_name, self)
         
         if popup.exec_() == QDialog.Accepted:
-            self.checkout_list.addItem(f"Ordered: {item_name}") 
+            # Safely check if checkout_list exists before using it
+            if not hasattr(self, 'checkout_list'):
+                print("Error: self.checkout_list is not initialized!")
+                return
+
+            # Add base price to running total
+            self.total_price = getattr(self, 'total_price', 0.0) + base_price
+            self.checkout_list.addItem(f"Ordered: {item_name} (${base_price:.2f})") 
             
-            if item_name.lower() in self.MAIN_MEALS:
+            if hasattr(self, 'MAIN_MEALS') and item_name.lower() in self.MAIN_MEALS:
                 mealpopup = MealPopup(item_name, self)
                 if mealpopup.exec_() == QDialog.Accepted:
                     print("Upgraded to a full combo meal! Adding $5.")
                     
+                    # Add combo upgrade fee to total
+                    self.total_price += 5.00
+                    
                     last_row = self.checkout_list.count() - 1
                     last_item = self.checkout_list.item(last_row)
-                    last_item.setText(f"Ordered: {item_name} - MEAL ({item_name} + Fries + Drink)")
+                    last_item.setText(f"Ordered: {item_name} (${base_price: .2f}) - MEAL ({item_name} + Fries + Drink) (+ $5.00)")
                     
-                    cart_text = "This is the checkout Page\n\n--- Current Cart Contents ---\n"
-                    for row in range(self.checkout_list.count()):
-                        item = self.checkout_list.item(row) 
-                        cart_text += f"- {item.text()}\n"
-                    cart_text += "-----------------------------"
-                    self.checkout_label.setText(cart_text)
-                    
+                    self.update_cart_display()
                 else:
                     print("User declined the meal upgrade.")
-                    cart_text = "This is the Checkout Page\n\n--- Current Cart Contents ---\n"
-                    for row in range(self.checkout_list.count()):
-                        item = self.checkout_list.item(row)
-                        cart_text += f"- {item.text()}\n" 
-                    cart_text += "-----------------------------"                    
-                    self.checkout_label.setText(cart_text)
+                    self.update_cart_display()
             else:
-                cart_text = "This is the Checkout Page\n\n--- Current Cart Contents ---\n"
-                for row in range(self.checkout_list.count()):
-                    item = self.checkout_list.item(row)
-                    cart_text += f"- {item.text()}\n" 
-                cart_text += "-----------------------------"                    
-                self.checkout_label.setText(cart_text)
+                self.update_cart_display()
 
+    # 2. Add this helper method to refresh the UI text safely
+    def update_cart_display(self):
+        if not hasattr(self, 'checkout_label'):
+            return
+            
+        cart_text = "This is the Checkout Page\n\n--- Current Cart Contents ---\n"
+        
+        if hasattr(self, 'checkout_list'):
+            for row in range(self.checkout_list.count()):
+                item = self.checkout_list.item(row) 
+                cart_text += f"- {item.text()}\n"
+                
+        cart_text += "-----------------------------\n"
+        current_total = getattr(self, 'total_price', 0.0)
+        cart_text += f"Total Price: ${current_total:.2f}"
+        self.checkout_label.setText(cart_text)
 
     def create_checkout(self):
         page = QWidget()
