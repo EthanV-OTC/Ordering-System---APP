@@ -20,12 +20,12 @@ class FoodPopup(QDialog):
         
         layout = QVBoxLayout()
         
-        self.ordermessage = QLabel(f"Would you like to add a {item_name} to your list?")
+        self.ordermessage = QLabel(f"Would you like to add a {item_name} to your Cart?")
         layout.addWidget(self.ordermessage)
         
         button_layout = QHBoxLayout()
         
-        self.add_btn = QPushButton("Add to List")
+        self.add_btn = QPushButton("Add to Cart")
         self.add_btn.clicked.connect(self.accept) 
         
         self.close_btn = QPushButton("Close")
@@ -292,20 +292,6 @@ class MainWindow(QMainWindow):
 
         self.subwaylabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.subway))
 
-        # --- Sale Logo ---
-        salepath = os.path.join(base_path, "images", "Sale-logo.png")
-        salelogo = QPixmap(salepath)
-        self.salelabel = ClickableLabel()
-
-        if salelogo.isNull():
-            print(f"Failed to load image at {salepath}")
-        else:
-            self.salelabel.setPixmap(salelogo)
-            self.salelabel.setScaledContents(True)
-        self.salelabel.setFixedSize(250, 250)
-
-        self.salelabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.sale))
-
         # Row 1
         layout.addWidget(self.McDonaldslabel, 0, 0)
         layout.addWidget(self.Bklabel, 0, 1)
@@ -318,7 +304,6 @@ class MainWindow(QMainWindow):
 
         # Row 3
         layout.addWidget(self.kfclabel, 2, 0)
-        layout.addWidget(self.salelabel, 2, 1)
         layout.addWidget(self.subwaylabel, 2 ,2)
 
         return page
@@ -382,6 +367,10 @@ class MainWindow(QMainWindow):
 
         self.register_email = QLineEdit()
         self.register_email.setPlaceholderText("Enter your Email here!")
+        self.email_warning = QLabel() 
+        self.email_warning.setText("We only support @gmail.com, @hotmail.com and @outlook.com email addresses currently!! Sorry for any issues!")
+        self.email_warning.setWordWrap(True)
+        self.email_warning.setStyleSheet("color: red; font-size: 11px;") 
 
         self.register_pass = QLineEdit()
         self.register_pass.setPlaceholderText("Enter your Password here!")
@@ -397,6 +386,7 @@ class MainWindow(QMainWindow):
         self.register_btn.clicked.connect(self.register_is_clicked)
 
         layout.addWidget(self.register_email)
+        layout.addWidget(self.email_warning)
         layout.addSpacing(10)
         layout.addWidget(self.register_pass)
         layout.addSpacing(6)
@@ -1649,12 +1639,10 @@ class MainWindow(QMainWindow):
         popup = FoodPopup(item_name, self)
         
         if popup.exec_() == QDialog.Accepted:
-            # Safely check if checkout_list exists before using it
             if not hasattr(self, 'checkout_list'):
                 print("Error: self.checkout_list is not initialized!")
                 return
 
-            # Add base price to running total
             self.total_price = getattr(self, 'total_price', 0.0) + base_price
             self.checkout_list.addItem(f"Ordered: {item_name} (${base_price:.2f})") 
             
@@ -1663,7 +1651,6 @@ class MainWindow(QMainWindow):
                 if mealpopup.exec_() == QDialog.Accepted:
                     print("Upgraded to a full combo meal! Adding $5.")
                     
-                    # Add combo upgrade fee to total
                     self.total_price += 5.00
                     
                     last_row = self.checkout_list.count() - 1
@@ -1677,7 +1664,6 @@ class MainWindow(QMainWindow):
             else:
                 self.update_cart_display()
 
-    # 2. Add this helper method to refresh the UI text safely
     def update_cart_display(self):
         if not hasattr(self, 'checkout_label'):
             return
