@@ -4,6 +4,7 @@ from PyQt5.QtGui import QPixmap
 import sys, os
 
 class ClickableLabel(QLabel):
+    # --Creating a new function that allows labels to be clicked and work as buttons--
     clicked = pyqtSignal()
 
     def __init__(self, parent=None):
@@ -13,6 +14,7 @@ class ClickableLabel(QLabel):
         self.clicked.emit()
 
 class FoodPopup(QDialog):
+    # --Creating a popup function for when the user clicks an item, this popup asks the user if they would like to add the item to their menu and then sends the item to the checkout if the user clicks yes--
     def __init__(self, item_name, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Add to Order")
@@ -38,6 +40,7 @@ class FoodPopup(QDialog):
         self.setLayout(layout)
 
 class MealPopup(QDialog):
+    # --Creating the same thing as the other popup except it sends the checkout a different message to print--
     def __init__(self, item_name, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Make it a Meal?")
@@ -85,11 +88,14 @@ class MainWindow(QMainWindow):
         main_layout = QVBoxLayout(main_container)
         main_layout.setContentsMargins(0, 0, 0, 0)
         self.setCentralWidget(main_container)
-        
+
+        # --Navbar--
         self.navbar = QHBoxLayout()
         self.setup_navbar()
         main_layout.addLayout(self.navbar)
 
+
+        # --Creating and setting all the pages--
         self.stacked_widget = QStackedWidget()
         main_layout.addWidget(self.stacked_widget)
 
@@ -138,6 +144,7 @@ class MainWindow(QMainWindow):
         self.load_remembered_credentials()
 
     def setup_navbar(self):
+        # --Creating all the Nav buttons--
         self.btn_login = QPushButton("Login")
         self.btn_logout = QPushButton("Logout")
         btn_home = QPushButton("Home")
@@ -151,6 +158,7 @@ class MainWindow(QMainWindow):
         self.btn_logout.setObjectName("btn_logout")
         self.btn_checkout.setObjectName("btn_checkout")
 
+        # --Making all the buttons take you to the correct place--
         self.btn_login.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Login))
         btn_home.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Home))
         btn_burgers.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.burgers))
@@ -159,7 +167,7 @@ class MainWindow(QMainWindow):
         btn_sandwich.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.sandwich))
         self.btn_checkout.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.checkout))
 
-
+        # --Logout connection--
         self.btn_logout.clicked.connect(self.logout_user)
 
         self.navbar.addWidget(self.btn_login)
@@ -376,7 +384,7 @@ class MainWindow(QMainWindow):
         self.register_pass.setPlaceholderText("Enter your Password here!")
         self.register_pass.setEchoMode(QLineEdit.Password)
 
-        self.register_status = QLabel("Invalid Email!! Please enter one with an '@_____.com' to proceed!!")
+        self.register_status = QLabel("Invalid Email!! Please check if there are any capital letters in the '@_____.com' part, as well as if your email is one of the three that are used in our system.")
         self.register_status.setStyleSheet("color: red; font-size: 11px;")
         self.register_status.setFrameShape(QLabel.NoFrame)
         self.register_status.setWordWrap(True)
