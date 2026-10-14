@@ -394,7 +394,10 @@ class MainWindow(QMainWindow):
         self.register_pass.setPlaceholderText("Enter your Password here!")
         self.register_pass.setEchoMode(QLineEdit.Password)
 
+<<<<<<< HEAD
         # --Register warning saying that theres something wrong with the input email--
+=======
+>>>>>>> 336950450139023292dd12428bef737af4be5e5d
         self.register_status = QLabel("Invalid Email!! Please check if there are any capital letters in the '@_____.com' part, as well as if your email is one of the three that are used in our system.")
         self.register_status.setStyleSheet("color: red; font-size: 11px;")
         self.register_status.setFrameShape(QLabel.NoFrame)
@@ -1676,7 +1679,10 @@ class MainWindow(QMainWindow):
                 print("Error: self.checkout_list is not initialized!")
                 return
 
+<<<<<<< HEAD
             # --When an item is ordered it gets sent as an item first where its added to the list and then has its price added to the total--
+=======
+>>>>>>> 336950450139023292dd12428bef737af4be5e5d
             self.total_price = getattr(self, 'total_price', 0.0) + base_price
             self.checkout_list.addItem(f"Ordered: {item_name} (${base_price:.2f})") 
 
@@ -1702,7 +1708,10 @@ class MainWindow(QMainWindow):
             else:
                 self.update_cart_display()
 
+<<<<<<< HEAD
     
+=======
+>>>>>>> 336950450139023292dd12428bef737af4be5e5d
     def update_cart_display(self):
         if not hasattr(self, 'checkout_label'):
             return
