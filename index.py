@@ -4,6 +4,7 @@ from PyQt5.QtGui import QPixmap
 import sys, os
 
 class ClickableLabel(QLabel):
+    # --Creating a new function that allows labels to be clicked and work as buttons--
     clicked = pyqtSignal()
 
     def __init__(self, parent=None):
@@ -13,6 +14,7 @@ class ClickableLabel(QLabel):
         self.clicked.emit()
 
 class FoodPopup(QDialog):
+    # --Creating a popup function for when the user clicks an item, this popup asks the user if they would like to add the item to their menu and then sends the item to the checkout if the user clicks yes--
     def __init__(self, item_name, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Add to Order")
@@ -20,12 +22,12 @@ class FoodPopup(QDialog):
         
         layout = QVBoxLayout()
         
-        self.ordermessage = QLabel(f"Would you like to add a {item_name} to your list?")
+        self.ordermessage = QLabel(f"Would you like to add a {item_name} to your Cart?")
         layout.addWidget(self.ordermessage)
         
         button_layout = QHBoxLayout()
         
-        self.add_btn = QPushButton("Add to List")
+        self.add_btn = QPushButton("Add to Cart")
         self.add_btn.clicked.connect(self.accept) 
         
         self.close_btn = QPushButton("Close")
@@ -38,6 +40,7 @@ class FoodPopup(QDialog):
         self.setLayout(layout)
 
 class MealPopup(QDialog):
+    # --Creating the same thing as the other popup except it sends the checkout a different message to print--
     def __init__(self, item_name, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Make it a Meal?")
@@ -85,11 +88,14 @@ class MainWindow(QMainWindow):
         main_layout = QVBoxLayout(main_container)
         main_layout.setContentsMargins(0, 0, 0, 0)
         self.setCentralWidget(main_container)
-        
+
+        # --Navbar--
         self.navbar = QHBoxLayout()
         self.setup_navbar()
         main_layout.addLayout(self.navbar)
 
+
+        # --Creating and setting all the pages--
         self.stacked_widget = QStackedWidget()
         main_layout.addWidget(self.stacked_widget)
 
@@ -138,6 +144,7 @@ class MainWindow(QMainWindow):
         self.load_remembered_credentials()
 
     def setup_navbar(self):
+        # --Creating all the Nav buttons--
         self.btn_login = QPushButton("Login")
         self.btn_logout = QPushButton("Logout")
         btn_home = QPushButton("Home")
@@ -151,6 +158,7 @@ class MainWindow(QMainWindow):
         self.btn_logout.setObjectName("btn_logout")
         self.btn_checkout.setObjectName("btn_checkout")
 
+        # --Making all the buttons take you to the correct place--
         self.btn_login.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Login))
         btn_home.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Home))
         btn_burgers.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.burgers))
@@ -159,9 +167,10 @@ class MainWindow(QMainWindow):
         btn_sandwich.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.sandwich))
         self.btn_checkout.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.checkout))
 
-
+        # --Logout connection--
         self.btn_logout.clicked.connect(self.logout_user)
 
+        # --Navbar widgets--
         self.navbar.addWidget(self.btn_login)
         self.navbar.addWidget(self.btn_logout)
         self.navbar.addWidget(btn_home)
@@ -179,6 +188,8 @@ class MainWindow(QMainWindow):
         page.setLayout(layout)
 
         base_path = os.path.dirname(os.path.abspath(__file__))
+
+        # --These are all the home screen logos that can be clicked and take you to their pages--
         
         # --- McDonald's Logo ---
         McDonaldspath = os.path.join(base_path, "images", "McDonalds-logo.png")
@@ -292,20 +303,6 @@ class MainWindow(QMainWindow):
 
         self.subwaylabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.subway))
 
-        # --- Sale Logo ---
-        salepath = os.path.join(base_path, "images", "Sale-logo.png")
-        salelogo = QPixmap(salepath)
-        self.salelabel = ClickableLabel()
-
-        if salelogo.isNull():
-            print(f"Failed to load image at {salepath}")
-        else:
-            self.salelabel.setPixmap(salelogo)
-            self.salelabel.setScaledContents(True)
-        self.salelabel.setFixedSize(250, 250)
-
-        self.salelabel.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.sale))
-
         # Row 1
         layout.addWidget(self.McDonaldslabel, 0, 0)
         layout.addWidget(self.Bklabel, 0, 1)
@@ -318,7 +315,6 @@ class MainWindow(QMainWindow):
 
         # Row 3
         layout.addWidget(self.kfclabel, 2, 0)
-        layout.addWidget(self.salelabel, 2, 1)
         layout.addWidget(self.subwaylabel, 2 ,2)
 
         return page
@@ -333,6 +329,7 @@ class MainWindow(QMainWindow):
         layout = QVBoxLayout(form_widget)
         layout.setSpacing(0)
 
+        # --Login text boxes--
         self.login_email = QLineEdit()
         self.login_email.setPlaceholderText("Enter Your Email Here")
 
@@ -340,20 +337,25 @@ class MainWindow(QMainWindow):
         self.login_password.setPlaceholderText("Enter Your Password Here")
         self.login_password.setEchoMode(QLineEdit.Password)
 
+        # --Incorrect email/password warning--
         self.password_status = QLabel("Incorrect email or password!!")
         self.password_status.setStyleSheet("color: red; font-size: 11px;")
         self.password_status.setFrameShape(QLabel.NoFrame)
         self.password_status.setWordWrap(True)
         self.password_status.setVisible(False)
 
+        # --Remember me checkbox--
         self.login_rememberme = QCheckBox("Remember Me?")
 
+        # --Login button--
         self.loginbutton = QPushButton("Click here to Login")
         self.loginbutton.clicked.connect(self.login_is_clicked)    
 
+        # --Register page button--
         self.registerpage_button = QPushButton("Haven't logged in before? Register Here!!")
         self.registerpage_button.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(3))
 
+        # --Layout setting--
         layout.addWidget(self.login_email)
         layout.addSpacing(20)                
         layout.addWidget(self.login_password)
@@ -380,23 +382,32 @@ class MainWindow(QMainWindow):
         layout = QVBoxLayout(form_widget)
         layout.setSpacing(0)
 
+        # --register text boxs + Warning stating only the current emails are usable--
         self.register_email = QLineEdit()
         self.register_email.setPlaceholderText("Enter your Email here!")
+        self.email_warning = QLabel() 
+        self.email_warning.setText("We only support @gmail.com, @hotmail.com and @outlook.com email addresses currently!! Sorry for any issues!")
+        self.email_warning.setWordWrap(True)
+        self.email_warning.setStyleSheet("color: red; font-size: 11px;") 
 
         self.register_pass = QLineEdit()
         self.register_pass.setPlaceholderText("Enter your Password here!")
         self.register_pass.setEchoMode(QLineEdit.Password)
 
-        self.register_status = QLabel("Invalid Email!! Please enter one with an '@_____.com' to proceed!!")
+        # --Register warning saying that theres something wrong with the input email--
+        self.register_status = QLabel("Invalid Email!! Please check if there are any capital letters in the '@_____.com' part, as well as if your email is one of the three that are used in our system.")
         self.register_status.setStyleSheet("color: red; font-size: 11px;")
         self.register_status.setFrameShape(QLabel.NoFrame)
         self.register_status.setWordWrap(True)
         self.register_status.setVisible(False)
 
+        # --Register button--
         self.register_btn = QPushButton('Click here to Register!')
         self.register_btn.clicked.connect(self.register_is_clicked)
 
+        # --Layout setting--
         layout.addWidget(self.register_email)
+        layout.addWidget(self.email_warning)
         layout.addSpacing(10)
         layout.addWidget(self.register_pass)
         layout.addSpacing(6)
@@ -409,6 +420,7 @@ class MainWindow(QMainWindow):
         return page
 
     def logout_user(self):
+        # --This system basically resets the login system and the remember me settings--
         self.is_logged_in = False
         print("User is now logged out!")
 
@@ -424,6 +436,7 @@ class MainWindow(QMainWindow):
         self.stacked_widget.setCurrentIndex(0)
 
     def register_is_clicked(self):
+        # --This system makes the register email/password = the users login email/password but then gives an error if the email is incorrect--
         self.email = self.register_email.text()
         self.password = self.register_pass.text()        
         
@@ -433,6 +446,7 @@ class MainWindow(QMainWindow):
         self.stacked_widget.setCurrentIndex(1)
 
     def login_is_clicked(self):
+        # --This system makes sure that whatever was input into the register system 
         input_email = self.login_email.text()
         input_password = self.login_password.text()
 
@@ -476,7 +490,7 @@ class MainWindow(QMainWindow):
             self.email = (saved_email)
             self.password = (saved_password)
 
-
+        # --These next couple sections just build the sub pages and then re add the logos and links to the restuarant pages--
     def create_burgers(self):
         page = QWidget()
         
@@ -706,7 +720,7 @@ class MainWindow(QMainWindow):
 
     
 
-
+        # --These next bunch of pages are all just the store pages themselves holding the shops items and allowing them to be purchased, these next couple comments will apply to all of the next store pages unless I actually write something in them--
     def create_mcdonalds(self):
         page = QWidget()
         
@@ -714,7 +728,8 @@ class MainWindow(QMainWindow):
         page.setLayout(main_outer_layout)
 
         header_layout = QHBoxLayout()
-        
+
+        # --Setting and placing the button that allows you to go back to the home page
         self.mcdonalds_back_button = QPushButton("← Go Home")
         self.mcdonalds_back_button.clicked.connect(lambda: self.stacked_widget.setCurrentWidget(self.Home))
         self.mcdonalds_back_button.setFixedWidth(100) 
@@ -729,18 +744,22 @@ class MainWindow(QMainWindow):
         base_path = os.path.dirname(os.path.abspath(__file__))
         
         # --- Big Mac Item ---
+        # --Price, display name, and item name that makes it able to be added to a list--
         bmprice = f"- $10.50"
         bmdisplay_text = f"Big Mac {bmprice}"
         bm_itemname = "Big Mac"
 
+        # --The box that the image and text sits in making it able to be placed on a grid with other items--
         bigmac_container = QWidget()
         bm_box = QVBoxLayout(bigmac_container)
         bm_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
+        # --Connecting the image link to an image pixmap and then making the whole thing a clickable label--
         bigmacpath = os.path.join(base_path, "images", "BigMac.png")
         bigmacphoto = QPixmap(bigmacpath)
         self.bigmaclabel = ClickableLabel()  
 
+        # --Warning incase theres no image avaliable then turns the pixmap into a label so that its easier to work with--
         if bigmacphoto.isNull():
             print(f"Failed to load image at: {bigmacpath}")
         else:
@@ -748,13 +767,15 @@ class MainWindow(QMainWindow):
             self.bigmaclabel.setScaledContents(True)        
         self.bigmaclabel.setFixedSize(250, 250)
 
+        # --Adds the display name into another label--
         self.bigmac_text_label = QLabel(bmdisplay_text)
         self.bigmac_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.bigmac_text_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #333333;")
 
-
+        # --Connects the clickable label to a button and makes it send a signal to the checkout giving it its display name and price so it can be calculated and printed--
         self.bigmaclabel.clicked.connect(lambda checked=False, name=bm_itemname, price=10.50: self.handle_food_click(name, price))
 
+        # --Combines the clickable label and text label into one box so it can be simply placed onto the page grid--
         bm_box.addWidget(self.bigmaclabel)
         bm_box.addWidget(self.bigmac_text_label)
 
@@ -815,11 +836,12 @@ class MainWindow(QMainWindow):
 
         c_box.addWidget(self.cokelabel)
         c_box.addWidget(self.coke_text_label)
-        layout.addWidget(coke_container, 0, 2)
 
+        # --Adding all the boxs to the restuarant pages grid--
         layout.addWidget(bigmac_container, 0, 0) 
         layout.addWidget(fries_container, 0, 1)
-        
+        layout.addWidget(coke_container, 0, 2)   
+
         main_outer_layout.addLayout(layout)
         main_outer_layout.addStretch()
         
@@ -1644,26 +1666,27 @@ class MainWindow(QMainWindow):
 
         layout.addWidget(self.Label)
         return page
-        
+
+        # --This handles the ordering system for when an item is clicked and either kept as an item or is a main meal and is chosen to be a full meal--
     def handle_food_click(self, item_name, base_price=0.0):
         popup = FoodPopup(item_name, self)
         
         if popup.exec_() == QDialog.Accepted:
-            # Safely check if checkout_list exists before using it
             if not hasattr(self, 'checkout_list'):
                 print("Error: self.checkout_list is not initialized!")
                 return
 
-            # Add base price to running total
+            # --When an item is ordered it gets sent as an item first where its added to the list and then has its price added to the total--
             self.total_price = getattr(self, 'total_price', 0.0) + base_price
             self.checkout_list.addItem(f"Ordered: {item_name} (${base_price:.2f})") 
-            
+
+            # --If the items itemname is in the main meals list then a popup appears asking if the user would like to make it a meal--
             if hasattr(self, 'MAIN_MEALS') and item_name.lower() in self.MAIN_MEALS:
                 mealpopup = MealPopup(item_name, self)
+                # --If an item is ordered and then its chosen to be an item this system replaces the last item entry (the singular item) and is replaced by new text as well as adding the original price +$5 to the total because the meal price is set to that--
                 if mealpopup.exec_() == QDialog.Accepted:
                     print("Upgraded to a full combo meal! Adding $5.")
                     
-                    # Add combo upgrade fee to total
                     self.total_price += 5.00
                     
                     last_row = self.checkout_list.count() - 1
@@ -1671,13 +1694,15 @@ class MainWindow(QMainWindow):
                     last_item.setText(f"Ordered: {item_name} (${base_price: .2f}) - MEAL ({item_name} + Fries + Drink) (+ $5.00)")
                     
                     self.update_cart_display()
+                # --If the user declines the mean upgrade the system just continues on and updates the list as usual--
                 else:
                     print("User declined the meal upgrade.")
                     self.update_cart_display()
+            # --If the item isnt in the main meals list this whole section is skipped and the system continues on and updates the list as usual--
             else:
                 self.update_cart_display()
 
-    # 2. Add this helper method to refresh the UI text safely
+    
     def update_cart_display(self):
         if not hasattr(self, 'checkout_label'):
             return
