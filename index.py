@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QStackedWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QLabel, QLineEdit, QCheckBox, QDialog, QListWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QStackedWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QLabel, QLineEdit, QCheckBox, QDialog, QListWidget, QDesktopWidget
 from PyQt5.QtCore import Qt, QSettings, pyqtSignal
 from PyQt5.QtGui import QPixmap
 import sys, os
@@ -64,6 +64,21 @@ class MealPopup(QDialog):
 
         layout.addLayout(button_layout)
         self.setLayout(layout)
+
+        # --Center and shift the popup downward to dodge the original "Double click meal" mistake as shown in my trialling--
+        self.center_and_shift_down(offset_y=50) 
+
+    # --This just defines the function on how to offset the popup meal widget--
+    def center_and_shift_down(self, offset_y=50):
+        screen_geometry = QDesktopWidget().availableGeometry()
+        
+        screen_center = screen_geometry.center()
+        
+        x = screen_center.x() - (self.width() // 2)
+        
+        y = screen_center.y() - (self.height() // 2) + offset_y
+        
+        self.move(x, y)
 
 class MainWindow(QMainWindow):
     def __init__(self):
